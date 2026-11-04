@@ -1,0 +1,27 @@
+ぬこぬこじゅうななほ
+Copyright (c) 2026 endowz1975
+
+■ コード（HTML / JavaScript）：MIT License
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+■ 画像（cat/ と tiles/ とアイコン）：All rights reserved
+猫のイラストは ChatGPT（OpenAI）で作成しました。牌・タイトルの画像は、ゲーム内の3D描画から作成しました。
+ゲームで遊ぶのは自由です。画像の転用・再配布・別作品への利用は、ご遠慮ください。
+
+■ 同梱している他の部品
+- Three.js r149（3D描画）  Copyright (c) 2010-2023 three.js authors  MIT License  https://threejs.org/
+- Yusei Magic（倍プッシュの文字。使う文字だけを切り出したもの）  Copyright 2021 The Yusei Magic Project Authors
+  SIL Open Font License 1.1  https://openfontlicense.org/
+
+■ このゲームについて
+福本伸行先生の作品に着想を得た、個人による非公式のパロディ・ファン作品です。作者・出版社・権利者とは一切関係ありません。
+コードは Claude（Anthropic）の助けを借りて書きました。

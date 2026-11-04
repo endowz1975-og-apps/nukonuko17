@@ -1,0 +1,16 @@
+{
+  // Cloudflare に公開する設定。公開するのは app フォルダ（tools/pack.js で作る）
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nukonuko17",
+  "compatibility_date": "2026-10-12",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "app",
+    // index.html などを / に転送しない（オフライン用に保存したページが転送の結果になると、電波の無い時に開けなくなるため）
+    "html_handling": "none",
+    // 「/」を開いた時に index.html をそのまま返す
+    "not_found_handling": "single-page-application"
+  }
+}

@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d0b0a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>ぬこぬこじゅうななほ</title>
+<style>
+:root{--bg:#0d0b0a;--panel:#1a1512;--ink:#e8dcc4;--dim:#8a7d68;--blood:#b0121b;--gold:#d4a017}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Mincho ProN","Yu Mincho",serif;min-height:100vh}
+#app{max-width:820px;margin:0 auto;padding:10px}
+h1{margin:4px 0 8px;font-size:20px;letter-spacing:.2em;text-align:center;color:var(--gold)}
+h1 small{display:block;font-size:11px;color:var(--dim);letter-spacing:.1em}
+.side{background:var(--panel);border:1px solid #3a2d24;border-radius:8px;padding:8px;margin-bottom:8px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.name{font-weight:bold}
+#cEpi{font-size:11px;color:var(--gold);letter-spacing:.06em;min-height:1.2em;line-height:1.2}#cEpi:empty{display:none}
+.bar{flex:1;min-width:120px;height:14px;background:#2a1f1a;border-radius:7px;overflow:hidden}
+.bar{height:16px;border-radius:8px;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.bar i{display:block;height:100%;border-radius:8px;background:radial-gradient(circle at 50% 38%,#f0bf78 0 2px,transparent 2.6px) 0 0/9px 8px,radial-gradient(circle at 50% 60%,#a8672c 0 3.2px,transparent 3.8px) 4px 4px/9px 8px,linear-gradient(180deg,#d99a4e,#8f5522);box-shadow:inset 0 -2px 3px rgba(60,28,6,.5);transition:width .5s}
+.cc{font-variant-numeric:tabular-nums;min-width:80px;text-align:right}
+.meta{font-size:12px;color:var(--dim);margin-top:4px}
+.lbl{font-size:11px;color:var(--dim);margin-top:6px}
+.tiles{display:flex;flex-wrap:wrap;gap:2px;margin-top:3px;min-height:20px}
+.river .t{width:24px;height:34px;font-size:14px}
+.river .t small{font-size:8px}
+.river .t.rii{transform:rotate(90deg);margin:5px 5px}
+.call{position:fixed;left:50%;z-index:45;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 0 14px #000c) drop-shadow(0 0 3px #000);animation:callIn 1.4s ease-out forwards}
+.call.p{top:62%}.call.c{top:30%}
+.call span{display:block;font-family:"Yuji Boku","Yuji Syuku","HGP行書体","HGS行書体","HG行書体","HGP教科書体","AR行書体M","BIZ UDMincho","Yu Mincho","Hiragino Mincho ProN",serif;font-weight:900;font-size:min(23vw,170px,36vh);letter-spacing:.04em;line-height:1;white-space:nowrap;color:#d6281c;filter:url(#brush);-webkit-text-stroke:3px #d6281c;text-shadow:0 0 0 #fff}
+.call.ron span{color:#f2efe4;-webkit-text-stroke:3px #f2efe4;font-size:min(30vw,230px,44vh)}
+@keyframes callIn{0%{transform:translate(-50%,-50%) scale(2.4) rotate(-7deg);opacity:0}14%{transform:translate(-50%,-50%) scale(1) rotate(-3deg);opacity:1}78%{transform:translate(-50%,-50%) scale(1) rotate(-3deg);opacity:1}100%{transform:translate(-50%,-50%) scale(1.08) rotate(-3deg);opacity:0}}
+.zw{position:fixed;z-index:12;pointer-events:none;font-family:"Yuji Boku","Yuji Syuku","HGP行書体","HGS行書体","HG行書体","AR行書体M","BIZ UDMincho","Yu Mincho","Hiragino Mincho ProN",serif;font-weight:900;color:rgba(232,226,214,.78);text-shadow:0 0 6px #000,0 0 14px #000a;filter:url(#brush);white-space:nowrap;opacity:0;animation:zw 2.8s ease-in-out forwards}
+@keyframes zw{0%{opacity:0;transform:translateY(8px) rotate(var(--r)) scale(.9)}25%{opacity:.85}70%{opacity:.7}100%{opacity:0;transform:translateY(-22px) rotate(var(--r)) scale(1.06)}}
+.stick{display:none;vertical-align:middle;margin-left:10px;width:64px;height:9px;border-radius:5px;background:#f4f1e6;border:1px solid #888;position:relative;box-shadow:0 2px 3px #0008;animation:stickIn .7s cubic-bezier(.2,.8,.3,1.2)}
+.stick:before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#d22}
+.stick:after{content:"";position:absolute;left:7px;right:7px;top:3px;height:1px;background:repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 8px)}
+@keyframes stickIn{0%{transform:translateY(-60px) rotate(-40deg) scale(1.6);opacity:0}100%{transform:none;opacity:1}}
+.t{width:34px;height:48px;border-radius:4px;background:#f3ead0;color:#222;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;font-size:20px;line-height:1;border:1px solid #8a7d68;box-shadow:0 2px 0 #6b5f4a;user-select:none;position:relative}
+.t small{font-size:11px;font-weight:normal}
+.t.m{color:#b3261e}.t.p{color:#1f4fa3}.t.s{color:#1f7a3a}.t.z{color:#222}.t.hr{color:#b3261e}.t.hg{color:#1f7a3a}.t.hw{color:#888}
+.t.back{background:repeating-linear-gradient(45deg,#1d4d3a,#1d4d3a 4px,#16392b 4px,#16392b 8px);border-color:#0e2a20;color:transparent}
+.t.blk{background:#3a3a3a;border-color:#000}
+.t.blk.m{color:#ff8a80}.t.blk.p{color:#8ab4ff}.t.blk.s{color:#7fe08f}.t.blk.z{color:#eee}.t.blk.hw{color:#bbb}.t.blk.hg{color:#7fe08f}.t.blk.hr{color:#ff8a80}
+.t.aka{background:#ffe3d6;border-color:#d8281c;box-shadow:inset 0 0 0 2px #e8442e;color:#e0140c!important}
+.t.glass{background:rgba(243,234,208,.6);border:2px dashed var(--gold)}
+.t.glass::after{content:"透";position:absolute;top:-8px;right:-4px;font-size:10px;background:var(--gold);color:#000;border-radius:3px;padding:0 2px}
+.t.ronhl{outline:2px solid #fff3c4;z-index:2;animation:ronpulse .7s ease-in-out infinite alternate}
+@keyframes ronpulse{from{transform:scale(1.1);box-shadow:0 0 10px 4px #ff3b30,0 0 24px 8px rgba(255,90,60,.6)}to{transform:scale(1.35);box-shadow:0 0 18px 8px #ffd27a,0 0 50px 18px rgba(255,40,20,.8)}}
+.t.wait::after{content:"待";position:absolute;top:-8px;right:-4px;font-size:10px;background:#c0392b;color:#fff;border-radius:3px;padding:0 2px}
+.click .t{cursor:pointer}.click .t:hover{transform:translateY(-5px)}
+.mid{text-align:center;padding:4px}
+.stake{font-size:20px;color:var(--gold)}
+#msg{min-height:22px;text-align:center;margin:4px 0;color:#f0c674}
+.btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+button{font:inherit;background:#2b1f18;color:var(--ink);border:1px solid #6b5338;border-radius:6px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#43301f}
+button:disabled{opacity:.35;cursor:default}
+button.win{background:#7a1a14;border-color:#c0392b}
+#timer{font-size:22px;font-variant-numeric:tabular-nums;color:#f0c674}
+#timer.low{color:#ff4b3a}
+#info{font-size:13px;white-space:pre-wrap;background:#120e0c;border-radius:6px;padding:6px;margin-top:6px;min-height:20px}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:12px;overflow:auto}
+#selBadge{font-size:20px;font-weight:bold;padding:2px 12px;border-radius:14px;background:#2b231b;border:2px solid #6b5338;color:var(--gold);white-space:nowrap}#selBadge.full{background:#1f5a2a;border-color:#6fd07f;color:#fff}#selBadge.over{background:#7a1a14;border-color:#e0584a;color:#fff}
+#cpk{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:12px;z-index:50}
+#cpk .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:14px;width:min(640px,96vw)}
+#cpk .tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}#cpk .tabs button{padding:5px 10px;font-size:13px}#cpk .tabs button.on{background:#7a1a14;border-color:#c0392b}
+#cpkDiff{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #4a3a28}#cpkLvD{min-height:2.6em;margin-top:2px}
+#cpk .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;min-height:170px}
+#cpk .card{border:1px solid #6b5338;border-radius:8px;padding:8px;text-align:center;cursor:pointer;background:#1f1712}#cpk .card:hover{background:#43301f}#cpk .card.sel{border-color:var(--gold);box-shadow:0 0 8px var(--gold)}#cpk .card .face{height:96px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#6b5338}#cpk .card .face svg{height:96px;width:80px;background:#d8c9a8;border-radius:4px}#cpk .card.empty .nm{color:var(--dim)}
+#cpk .pg{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+#ov .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:16px;max-width:min(680px,96vw);text-align:center}
+#ov h2{margin:0 0 8px;color:var(--gold)}
+#ov .tiles.rts{gap:0;align-items:flex-end}
+#ov .dgrp{display:flex;align-items:center;gap:4px}
+.rt{margin:0 calc(var(--rw)*-.09)}
+.rt{--rw:min(44px,5.8vw);display:inline-block;width:var(--rw);aspect-ratio:80/108;background:url(tiles/tiles34.png) no-repeat;background-size:3400% 400%;flex:none}
+.rt.winT{margin-left:10px;filter:drop-shadow(0 0 5px rgba(255,214,120,.9))}
+.shout{position:fixed;left:50%;transform:translateX(-50%) rotate(-2deg);width:min(460px,92vw);height:min(120px,26vw);z-index:70;pointer-events:none;display:flex;align-items:center;justify-content:center;animation:shoutpop .45s cubic-bezier(.2,1.4,.4,1)}
+.shout.p{bottom:24%}.shout.c{top:16%}
+.shout svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 5px 7px rgba(0,0,0,.7))}
+.shout polygon{fill:#120d0c}.shout.c polygon{fill:#3a0d0d}.shout polygon.e{fill:none;stroke:#b8902f;stroke-width:1.5;vector-effect:non-scaling-stroke;opacity:.7}
+@font-face{font-family:ShoutBrush;src:url(fonts/shout.woff2?v=3) format("woff2");font-display:swap}
+.shout span{position:relative;font-family:ShoutBrush,"HGP行書体","HGS行書体","HG行書体","游明朝",serif;font-size:clamp(23px,5.8vw,40px);font-weight:400;color:#ffd25a;letter-spacing:.02em;text-align:center;padding:0 8%;line-height:1.2;-webkit-text-stroke:1px #5a3a00;paint-order:stroke fill;text-shadow:0 0 10px rgba(255,170,40,.55),0 2px 0 #3a2400;animation:shoutshake .09s steps(2) 5 .35s}
+@keyframes shoutpop{0%{transform:translateX(-50%) scale(2) rotate(-6deg);opacity:0}40%{transform:translateX(-50%) scale(.94) rotate(-2deg);opacity:1}100%{transform:translateX(-50%) scale(1) rotate(-2deg)}}
+@keyframes shoutshake{0%{transform:translate(-2px,1px)}100%{transform:translate(2px,-1px)}}
+#pushAsk{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:65;padding:12px}
+#pushAsk .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:16px 20px;max-width:min(460px,94vw);text-align:center}
+#pushAsk h2{margin:0 0 8px;color:var(--gold)}
+#ov .yk{margin:10px 0 4px}
+#ov .ykg{display:grid;grid-template-columns:1fr 1fr;gap:3px 18px;max-width:420px;margin:0 auto;text-align:left}
+#ov .ykg span{padding:2px 6px;border-bottom:1px solid #3a2e22}
+#ov .yks{margin-top:8px;font-size:1.15em;color:var(--gold);font-weight:bold}
+#ov .pay{margin:4px 0 0;font-size:1.05em}
+details{font-size:12px;color:var(--dim);margin-top:8px}
+.doraBox{display:flex;align-items:center;gap:6px;justify-content:center}
+.doraBox .t{width:26px;height:37px;font-size:15px}
+#setBox{text-align:center;margin-bottom:6px}
+#title{position:fixed;inset:0;z-index:40;background:radial-gradient(ellipse at center,#2a0d0d 0%,#0d0b0a 70%);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-bottom:calc(min(6vw,64px,7.5vh)*2 + 14px)}
+.tTitle{font-size:44px;letter-spacing:.3em;color:var(--gold);text-shadow:0 0 18px #7a1a14}
+.tSub{font-size:15px;color:var(--dim);margin-bottom:18px;letter-spacing:.1em}
+.tSub{text-align:center}.w1,.w2{display:block;text-align:center}.tSub .w1{display:flex;align-items:center;justify-content:center;gap:14px}.tSub .w1::before,.tSub .w1::after{content:"";width:56px;height:2px;background:linear-gradient(90deg,transparent,#c9b888)}.tSub .w1::after{background:linear-gradient(270deg,transparent,#c9b888)}.tSub .w1{font-size:24px;color:#c9b888;letter-spacing:.14em;margin-bottom:4px}h1 small .w1{font-size:15px;color:#c9b888}
+#tTiles{--w:min(10.2vw,110px,11vh);position:relative;width:100%;height:calc(var(--w)*2.6);margin-bottom:0}
+#tTiles i{position:absolute;top:0;left:50%;width:var(--w);margin-left:calc(var(--w)/-2);aspect-ratio:150/204;background:url(tiles/kokushi.png) no-repeat;background-size:1300% 200%;transform-origin:50% calc(var(--w)*1.36*6.5);transform:rotate(var(--a));animation:tbob 3s ease-in-out infinite}
+#tCats{--cw:min(6vw,64px,7.5vh);position:absolute;left:0;right:0;margin:0 auto;max-width:calc(var(--cw)*12);bottom:6px;display:flex;flex-wrap:wrap;justify-content:center;pointer-events:none}
+#tCats i{display:block;width:var(--cw);aspect-ratio:1;background:url(tiles/cats.png) no-repeat;background-size:2400% 100%;opacity:.7;filter:brightness(.85)}
+@media(max-width:600px){#tCats{--cw:8vw}#title{padding-bottom:calc(16vw + 14px);gap:8px}.tTitle{font-size:clamp(22px,7.4vw,34px);letter-spacing:.1em;white-space:nowrap}.tSub{font-size:12px;margin-bottom:8px}.tSub .w1{gap:8px;font-size:14px;white-space:nowrap}.tSub .w1::before,.tSub .w1::after{width:22px}#title .tbtn{padding-top:9px;padding-bottom:9px}}
+@media(max-height:620px){#tCats{display:none}#title{padding-bottom:0}}
+#tTiles i.g{filter:drop-shadow(0 0 3px rgba(190,225,255,.5))}#tTiles i.b{filter:drop-shadow(0 0 3px rgba(255,255,255,.2))}
+#tTiles i:nth-child(2n){animation-delay:-1s}#tTiles i:nth-child(3n){animation-delay:-2s}
+@keyframes tbob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.tbtn{width:220px;font-size:20px;padding:12px;letter-spacing:.3em}
+#dice{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:35}
+#dice .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:18px 26px;text-align:center;min-width:300px}
+#dice h3{margin:0 0 10px;color:var(--gold)}
+.dRow{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:8px 0}
+.dv{font-size:36px;letter-spacing:.1em}
+.dmsg{min-height:24px;margin:8px 0;color:#f0c674}
+.wallrow{display:flex;flex-wrap:wrap;gap:2px;margin-top:4px}
+#bye{position:fixed;inset:0;z-index:60;background:#0d0b0a;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+#rulePanel{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:45;padding:10px}
+#rulePanel .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:620px;max-height:90vh;overflow:auto}
+#rulePanel h3{margin:0 0 8px;color:var(--gold)}
+.rtext{font-size:13px;color:var(--ink);text-align:left}
+#setPanel{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:45}
+#setPanel .box{background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:16px 20px;min-width:300px}
+#setPanel .only3d{display:none!important}
+#setPanel .grp{border:1px solid #3a2d24;border-radius:6px;padding:6px 10px;margin:10px 0}
+#setPanel label.inl{display:inline-block;margin:0 12px 0 0}
+#setPanel select:disabled,#setPanel input:disabled{opacity:.5}
+#setPanel .box{max-height:92vh;overflow:auto}
+#setPanel h3{margin:0 0 10px;color:var(--gold)}
+#setPanel label{display:block;margin:12px 0}
+#setPanel select,#setPanel input{font:inherit;vertical-align:middle;margin-left:6px}
+#setPanel input[type=range]{width:150px}
+#cFace{width:104px;height:125px;margin:0 auto 6px;border:2px solid #6b5338;border-radius:6px;overflow:hidden;background:#d8c9a8}#cFace svg{width:100%;height:100%;display:block}#cFace:empty{display:none}
+#cFace.cat{width:150px;height:150px;border:0;background:none;overflow:visible;position:relative}
+#cFace .catw{position:relative;width:100%;height:100%;transform-origin:50% 100%}
+#cFace .catw img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.45))}
+#cFace .fx{position:absolute;inset:0;pointer-events:none}#cFace .fx svg{width:100%;height:100%;overflow:visible}
+#cFace .cat-win{animation:catwin .5s ease-out 2}
+#cFace .cat-lose img{filter:brightness(.78) saturate(.6) drop-shadow(0 3px 3px rgba(0,0,0,.45))}#cFace .cat-lose{transform:translateY(6px) scale(.97)}
+#cFace .cat-zawa{animation:catzawa .22s linear infinite}
+@keyframes catwin{0%{transform:translateY(0)}40%{transform:translateY(-12px) scale(1.04)}100%{transform:translateY(0)}}
+@keyframes catzawa{0%{transform:translateX(0)}25%{transform:translateX(-1.5px)}75%{transform:translateX(1.5px)}100%{transform:translateX(0)}}
+#cpk .card .face img{height:96px;width:96px;object-fit:contain}
+#cSay{display:none;margin:0 auto 8px;max-width:220px;background:#f4ecd8;color:#1a1410;border:2px solid #111;border-radius:12px;padding:6px 10px;font-size:14px;font-weight:bold;line-height:1.4;position:relative}#cSay:before{content:'';position:absolute;top:-8px;left:50%;margin-left:-6px;border:6px solid transparent;border-top:0;border-bottom-color:#111}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>ぬこぬこじゅうななほ<small><span class="w1">Waltz on The Edge</span><span class="w2">The Transparent 17 Steps</span></small></h1>
+
+<div id="setBox"><button id="setBtn">☰ メニュー</button></div>
+<div id="title"><div id="tCats"></div><div id="tTiles"></div><div class="tTitle">ぬこぬこじゅうななほ</div><div class="tSub"><span class="w1">Waltz on The Edge</span><span class="w2">The Transparent 17 Steps</span></div>
+<button class="tbtn" id="tStart">対局</button><button class="tbtn" id="tContinue" style="display:none">対局に戻る</button><button class="tbtn" id="tResume" style="display:none">前回の続きから</button><button class="tbtn" id="tSet">設定</button><button class="tbtn" id="tRule">ルール</button><button class="tbtn" id="tQuit">終了</button></div>
+<svg width="0" height="0" style="position:absolute"><filter id="brush" x="-8%" y="-8%" width="116%" height="116%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="n1"/><feDisplacementMap in="SourceGraphic" in2="n1" scale="11" result="d"/><feTurbulence type="fractalNoise" baseFrequency="0.9 0.035" numOctaves="2" seed="8" result="n2"/><feColorMatrix in="n2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.6 2.25" result="m"/><feComposite in="d" in2="m" operator="in"/></filter></svg>
+<div id="dice"><div class="box"><h3>先手・後手を決める</h3><div class="dRow"><span>あなた</span><span class="dv" id="diceP">　</span></div><div class="dRow"><span><span class="opn">老人</span></span><span class="dv" id="diceC">　</span></div><div class="meta" id="diceNote"></div><div class="dmsg" id="diceMsg"></div><div class="btns" id="diceBtns"></div></div></div>
+<div id="bye"><div class="tTitle" style="font-size:28px">終了しました</div><div class="tSub">このタブ（ウィンドウ）を閉じてください</div><button class="tbtn" id="byeBack">タイトルに戻る</button></div>
+<div id="setPanel"><div class="box"><h3>設定</h3>
+<label>対局形式 <select id="sMatch"><option value="blood">決着制（どちらかが尽きるまで）</option><option value="rounds">局数制</option></select> <span id="sRoundsW"><select id="sRounds"></select></span></label>
+<label>賭けるもの <select id="sUnit"><option value="kibble">カリカリ（g）</option><option value="chip">チップ（枚）</option></select> 初期量 <select id="sBlood"></select> <small id="sBloodN" style="color:var(--dim)"></small></label>
+<div class="grp"><b>ルール</b>
+<div class="radios">ルールプリセット　<label class="inl"><input type="radio" name="sPreset" value="orig"> 原作準拠</label><label class="inl"><input type="radio" name="sPreset" value="custom"> カスタム</label></div>
+<div class="meta">「原作準拠」を選ぶと、下の項目が原作どおりに自動で設定されます。個別に変えるときは「カスタム」を選んでください。</div>
+<div id="ruleFields">
+<label>場風ルール <select id="sFieldRule"><option value="0">OFF</option><option value="1">ON</option></select> <span id="sFieldW">場風 <select id="sField"><option value="27">東</option><option value="28">南</option><option value="29">西</option><option value="30">北</option><option value="-1">なし</option></select></span></label>
+<label>自風　先手 <select id="sWF"><option value="27">東</option><option value="28">南</option><option value="29">西</option><option value="30">北</option><option value="-1">なし</option></select>　後手 <select id="sWS"><option value="27">東</option><option value="28">南</option><option value="29">西</option><option value="30">北</option><option value="-1">なし</option></select></label>
+<label>親・子制度 <select id="sOyako"><option value="0">OFF</option><option value="1">ON（先手＝親・東、後手＝子・南。親の和了は×1.5）</option></select></label>
+<label id="sOffW">　親子制度OFFのときの点数 <select id="sOffPts"><option value="ko">子の点数（満貫＝賭けカリカリ）</option><option value="oya">親の点数（全員を親として計算、倍率は×1.5）</option></select></label>
+<label>連荘 <select id="sRenchan"><option value="0">OFF（毎局、先手が交代）</option><option value="1">ON（和了した側が次も先手）</option></select></label>
+<label>先手の決め方 <select id="sFirstBy"><option value="dice">サイコロ（目の大きい方が先手・後手を選ぶ）</option><option value="random">ランダム</option></select></label>
+<label>ドラ表示牌 <select id="sDoraBy"><option value="pick">先手が両サイドの山から選ぶ</option><option value="random">ランダム</option></select></label>
+<label>透明牌方式 <select id="sMode"><option value="orig">原作式（各牌種 透明3枚＋黒1枚）</option><option value="perkind">牌種別（透明牌の枚数を指定）</option><option value="random">ランダム（割合を指定）</option></select></label>
+<label id="mRand">　透明牌の割合 <input type="range" id="sClr" min="0" max="100" step="5"> <b id="sClrV"></b></label>
+<label id="mKind">　1種類4枚のうち透明牌 <select id="sKind"></select></label>
+</div></div>
+<label>赤牌 <select id="sRed"><option value="0">なし</option><option value="1">あり（5萬・5筒・5索を1枚ずつ赤牌にする。持っていると1枚につき+1翻）</option></select></label>
+<label>縛り <select id="sBind"></select></label>
+<label>配牌の保証（イカサマなしのとき） <select id="sGuard"><option value="on">最低保証あり（縛りを超えるテンパイが作れる配牌だけ配る）</option><option value="luck">完全運任せ（作れない配牌もある。作れないと作牌チョンボ）</option></select></label>
+<label>点数計算 <select id="sScore"><option value="mult">賭けカリカリ×倍率（満貫＝賭けカリカリ、跳満1.5倍…）</option><option value="mj">麻雀の点数表（ロンの点数）</option></select></label>
+<label>リーチ <select id="sRii"><option value="1">あり（第一打牌で自動リーチ、+1翻）</option><option value="0">なし</option></select></label>
+<label>作牌の制限時間 <select id="sTime"></select></label>
+<label>検証ボタン <select id="sVerify"><option value="1">オン</option><option value="0">オフ</option></select>
+<select id="sVMode"><option value="detail">詳細（待ち・役・翻数を表示）</option><option value="simple">簡易（縛りを超えたかだけ）</option></select></label>
+<label class="only3d">視点 <select id="sView"><option value="angle">標準（斜め上）</option><option value="front">正面</option><option value="quarter">クォータービュー</option><option value="top">真上</option></select></label>
+<label class="only3d">操作方式 <select id="sCtl"><option value="cad">CAD風（左ドラッグで回転、Shift／中ボタンで移動）</option><option value="std">標準（左ドラッグで移動、Shift／中ボタンで回転）</option></select></label>
+<label class="only3d">画面のゆれ <select id="sSway"><option value="0">オフ</option><option value="1">オン（マウスで少し動く）</option></select></label>
+<label>対戦相手 <button id="bCpk" type="button">選ぶ</button> <span id="cpkNow" class="meta"></span></label>
+<label>イカサマ <select id="sCheat"><option value="0">なし</option><option value="1">あり（透視・牌入れ替えが使える。配牌が縛りを超えられないこともある）</option></select></label>
+<div id="cheatW">
+<label>　透視の回数（1局） <select id="sPeekMax"><option value="1">1回</option><option value="2">2回</option><option value="3">3回</option><option value="5">5回</option><option value="0">無制限</option></select></label>
+<label>　牌入れ替えの回数（1局） <select id="sSwapMax"><option value="1">1回</option><option value="2">2回</option><option value="3">3回</option><option value="5">5回</option></select></label>
+<label>　発覚する確率（入れ替え1回ごと） <select id="sCaught"><option value="10">10%</option><option value="20">20%</option><option value="35">35%</option></select></label>
+</div>
+<label>効果音 <select id="sSfx"><option value="1">あり</option><option value="0">なし</option></select> <span id="sVolW">音量 <input type="range" id="sVol" min="0" max="100" step="5"> <b id="sVolV"></b></span></label>
+<label>ゴロゴロ… 演出 <select id="sZawa"><option value="1">あり（リーチのあと・ロン判断・カリカリが少ない時・透視を使った時）</option><option value="0">なし</option></select></label>
+<label>ロン牌のハイライト <select id="sRonHl"><option value="0">しない</option><option value="1">する（和了牌が出たら河の牌を光らせる）</option></select></label>
+<div class="meta">変更は次の局（局数制の局数と対局形式はすぐ）から反映されます。</div>
+<div class="btns"><button id="setClose">閉じる</button></div></div></div>
+<div id="rulePanel"><div class="box"><h3>ルール</h3><div class="rtext">
+<p>【十七歩】2人対戦、全136枚使用。各自54枚の山から34枚を取り、制限時間内（設定で変更、初期3分）に13枚を選んでテンパイを作る（残り21枚が手札）。13枚はテンパイしていればよいが、縛り（設定で変更、初期は満貫以上）を満たし役ありで上がらないとチョンボ（ドラのみは不可）。ツモ・鳴きなし。交互に手札から1枚ずつ河に切り、相手の待ち牌を切ればロン。17枚ずつ切って決着しなければ流局。</p>
+<p>【3D版の操作】ホイール／＋－／2本指ピンチでズーム。CAD風（初期）は、左ドラッグで好きな角度に回転、Shiftを押しながらドラッグ（または中ボタン）で移動。設定で標準（左ドラッグで移動、Shiftで回転）にも変更できます。↺↻ボタンで回転、⟲で元に戻す、👁で視点の種類を切替。</p>
+<p>【リーチ】17歩では、第一打牌がそのままリーチになります。リーチは自動で宣言され、1翻（リーチ）が付きます（設定でなしにもできます）。裏ドラは和了時に開きます。</p>
+<p>【ルールプリセット】原作準拠は、場風なし・自風は先手＝東／後手＝西・親子制度なし・連荘なし・透明牌は原作式（各牌種 透明3枚＋黒1枚）です。設定でカスタムにすると、場風（東南西北なし）、先手・後手の自風、親・子制度（ONで先手＝親・東、後手＝子・南、親の和了は×1.5）、連荘（ONで和了した側が次も先手）、透明牌方式（原作式／牌種別／ランダム）を個別に変えられます。</p>
+<p>【点数計算】設定で、賭けカリカリ×倍率（満貫＝賭けカリカリ、跳満×1.5、倍満×2、三倍満×3、役満×4）か、麻雀の点数表（ロンの点数。基本点×4＝子、×6＝親）かを選べます。点数表のときは、子の満貫8000点を賭けカリカリ（初期100g）として換算します（賭けカリカリが増えると比例して増えます）。親・子制度がONのときは、実際の親・子で計算します（親＝基本点×6）。OFFのときは、設定で「子の点数」か「親の点数（全員を親として計算）」を選べます。</p>
+<p>【先手・後手】サイコロを2個ずつ振り、目の合計が大きい方が先手・後手を選びます（同じ目なら振り直し）。先手の自風が東、後手が西です（原作準拠）。設定でランダムにもできます。</p>
+<p>【ドラ表示牌】先手が、両サイドの山（左右とも17列×上下2段の34枚ずつ）から好きな1枚をドラ表示牌に選びます。山の牌はすべて伏せてあり、中身は見えません。選んだ牌は山の上段で表向きになり（ドラ表示牌）、その真下の牌が裏ドラ表示牌になります。裏ドラ表示牌は和了したときだけ表向きになります。山は対局中も卓の両サイドに残ります。設定でランダムにもできます。</p>
+<p>【対戦相手】「対局」を押したときに、難易度を5段階（Casual・Easy・Normal・Hard・Ultimate）から選べます。相手の猫は難易度と関係なく好きに選べます。Ultimateの相手は、あなたが字牌や端の牌などをどの種類から切るかを対局のあいだ覚え、よく切られる牌を待ちに選びます。Casualの相手は、縛り未満の弱い手で作牌して和了し（アガリチョンボ）、ときどきテンパイしていない作牌ミスをし、見えている当たり牌にも振り込みます。</p>
+<p>【赤牌】設定でありにすると、5萬・5筒・5索のうち1枚ずつ（計3枚）が赤牌になります。配牌に赤牌が来ることもあり、和了形に含まれていると1枚につき1翻（ドラと同じ扱い）。ロン牌が赤牌でも1翻付きます。赤牌も透明牌・黒牌になることがあります（黒牌の赤牌は見えません）。</p>
+<p>フリテン：自分の河に待ち牌があるとロン不可。見逃すとその局はロン不可。裏ドラ表示牌は和了時に開く。</p>
+<p>【透明牌と黒牌】牌は透明牌か黒牌のどちらかです。原作式は各牌種4枚のうち3枚が透明牌・1枚が黒牌。設定で、牌種別に枚数を指定するか、ランダム（割合を指定）にもできます。透明牌は伏せていても表が相手に見えます（互いの13枚・手札の透明牌が丸見え）。黒牌だけが相手に見えません。黒牌は黒背景で表示。</p><p>【対局形式】決着制はどちらかの賭けるものが尽きるまで。局数制は決めた局数を終えた時点でカリカリの多いほうが勝ち（途中で0gになれば即終了）。</p>
+<p>【鷲巣】点棒の代わりに賭けるものは、カリカリ（猫用ごはん）です。設定でチップにも変えられます。初期は各1000g（設定で500〜2000gから選べる）。チップは10g＝1枚の換算です。和了で賭けカリカリ×満貫1／跳満1.5／倍満2／三倍満3／役満4をもらう。流局は賭けカリカリ倍で持ち越し（上限800）。イカサマ（設定でありにすると使える。初期はなし）：透視は、50g（チップなら5枚）で老人の13枚の黒牌1枚を暴きます（賭けカリカリ+50）。牌入れ替えは、作牌のとき、選んだ牌（残したい牌）以外を、自分の山の牌と入れ替えます（山は20枚なので、入れ替えられるのは最大20枚）。入れ替えるたびに一定の確率で見破られ、見破られると賭けカリカリの2倍（最低200g（チップなら20枚））を相手に払って局が終わります。イカサマありのときは、配牌が縛りを超えるテンパイを作れないことがあり、老人も同じ状況で入れ替えます。イカサマなしのときは、設定の「配牌の保証」で、最低保証あり（作れる配牌だけ配る）か、完全運任せ（作れない配牌もある）かを選べます。不成立の宣言（錯和）やチョンボは100g（チップなら10枚）献上、テンパイでない作牌チョンボと、満貫未満で上がったアガリチョンボは賭けカリカリを払う。</p>
+</div><div class="btns"><button id="ruleClose">閉じる</button></div></div></div>
+
+
+<div class="side">
+  <div id="cFace"></div>
+  <div id="cSay"></div>
+  <div id="cEpi"></div>
+  <div class="row"><span class="name" id="cName">老人</span><div class="bar"><i id="cBar"></i></div><span class="cc" id="cCC"></span></div>
+  <div class="meta" id="cMeta"></div>
+  <div class="lbl"><span class="opn">老人</span>の13枚（伏せ）</div><div class="tiles" id="cTen"></div>
+  <div class="lbl"><span class="opn">老人</span>の手札21枚（透明牌だけ見える・黒牌は伏せ）</div><div class="tiles river" id="cHandRow"></div>
+  <div class="lbl"><span class="opn">老人</span>の河<span class="stick" id="cStick"></span></div><div class="tiles river" id="cRiver"></div>
+</div>
+
+<div class="mid">
+  <div class="stake" id="stake"></div>
+  <div class="doraBox"><span class="meta">ドラ表示牌</span><span id="dora"></span><span class="meta" id="seat"></span></div>
+  <div id="msg"></div>
+</div>
+
+<div class="side" id="wallPanel" style="display:none"><div class="meta">ドラ表示牌を選べ（先手のみ）。左の山／右の山から1枚。山の牌は全部伏せてあり、中身は見えない。</div><div class="wallrow" id="wallL"></div><div class="wallrow" id="wallR"></div></div>
+<div class="side" id="buildBox" style="display:none">
+  <div class="row" style="justify-content:space-between"><b id="buildTitle">作牌</b><span id="selBadge">0/13</span><span id="timer">3:00</span></div>
+  <div class="lbl">配牌（クリックで選ぶ）</div><div class="tiles click" id="pool"></div>
+  <div class="lbl">選んだ牌 <span id="selN">0</span>/13（クリックで戻す）</div><div class="tiles click" id="sel"></div>
+  <div class="btns"><button id="bSwap" style="display:none">牌入れ替え</button><button id="bCheck">検証</button><button id="bOk" class="win">確定</button></div>
+  <div id="info"></div>
+</div>
+
+<div class="side" id="playBox" style="display:none">
+  <div class="lbl">あなたの河<span class="stick" id="pStick"></span></div><div class="tiles river" id="pRiver"></div>
+  <div class="lbl">あなたのテンパイ13枚</div><div class="tiles" id="pTen"></div>
+  <div class="meta" id="pWaitInfo"></div>
+  <div class="lbl">手札（クリックで切る）</div><div class="tiles click" id="pHand"></div>
+  <div class="row" style="margin-top:6px"><span class="name">あなた</span><div class="bar"><i id="pBar"></i></div><span class="cc" id="pCC"></span></div>
+  <div class="btns">
+    <button id="bRon" class="win">ロン</button>
+    <button id="bPass" title="右クリックでも見送れます">見送る（右クリック）</button>
+    <button id="bPeek">透視</button>
+  </div>
+</div>
+
+
+</div>
+<div id="cpk"><div class="box"><div id="cpkDiff"><div class="tabs" id="cpkLvs"></div><div class="meta" id="cpkLvD"></div></div><div class="tabs" id="cpkTabs"></div><div class="grid" id="cpkGrid"></div><div class="pg"><button id="cpkPrev" type="button">◀</button><span id="cpkPg" class="meta"></span><button id="cpkNext" type="button">▶</button></div><div style="text-align:right;margin-top:8px"><button id="cpkClose" type="button">閉じる</button></div></div></div>
+<button id="ovBack" style="display:none;position:fixed;left:12px;bottom:14px;z-index:60">結果に戻る</button>
+<div id="pushAsk"><div class="box"><h2 id="paT"></h2><p id="paB"></p><div class="btns"><button id="paYes">受けて立つ</button><button id="paNo">断る</button></div></div></div>
+<div id="ov"><div class="box"><h2 id="ovT"></h2><div id="ovB"></div><div class="btns"><button id="ovPeek" style="display:none">盤面を見る</button><button id="ovPush" style="display:none">倍プッシュ</button><button id="ovBtn">次へ</button><button id="ovTitle" style="display:none">タイトルへ</button></div></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const SN=['萬','筒','索'],HON=['東','南','西','北','白','發','中'];
+const YAO=k=>k>=27||k%9==0||k%9==8;
+let uid=0;
+const tn=k=>k<27?(k%9+1)+SN[k/9|0]:HON[k-27];
+const doraOf=i=>i<27?(i/9|0)*9+(i%9+1)%9:i<31?27+(i-27+1)%4:31+(i-31+1)%3;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const redN=ts=>ts.filter(t=>t.red).length;
+const cnt=ts=>{const c=Array(34).fill(0);ts.forEach(t=>c[t.k??t]++);return c};
+
+/* ---------- 和了判定 ---------- */
+function melds(c,i){
+  while(i<34&&c[i]==0)i++;
+  if(i>=34)return true;
+  if(c[i]>=3){c[i]-=3;const ok=melds(c,i);c[i]+=3;if(ok)return true}
+  if(i<27&&i%9<=6&&c[i+1]>0&&c[i+2]>0){c[i]--;c[i+1]--;c[i+2]--;const ok=melds(c,i);c[i]++;c[i+1]++;c[i+2]++;if(ok)return true}
+  return false;
+}
+const isChiitoi=c=>{let n=0,t=0;for(let i=0;i<34;i++){t+=c[i];if(c[i]==2)n++}return t==14&&n==7};
+function isKokushi(c){let p=0;for(let i=0;i<34;i++){if(YAO(i)){if(c[i]==0)return false;if(c[i]==2)p++;else if(c[i]!=1)return false}else if(c[i])return false}return p==1}
+function isWin34(c){
+  if(isChiitoi(c)||isKokushi(c))return true;
+  for(let i=0;i<34;i++)if(c[i]>=2){c[i]-=2;const ok=melds(c,0);c[i]+=2;if(ok)return true}
+  return false;
+}
+function decomps(c){
+  const out=[];
+  const rec=(i,gs,p)=>{
+    while(i<34&&c[i]==0)i++;
+    if(i>=34){out.push({pair:p,groups:gs.slice()});return}
+    if(c[i]>=3){c[i]-=3;gs.push({t:'t',k:i});rec(i,gs,p);gs.pop();c[i]+=3}
+    if(i<27&&i%9<=6&&c[i+1]>0&&c[i+2]>0){c[i]--;c[i+1]--;c[i+2]--;gs.push({t:'s',k:i});rec(i,gs,p);gs.pop();c[i]++;c[i+1]++;c[i+2]++}
+  };
+  for(let p=0;p<34;p++)if(c[p]>=2){c[p]-=2;rec(0,[],p);c[p]+=2}
+  return out;
+}
+
+/* ---------- 点数計算 ---------- */
+function tier(han,fu,ym){
+  if(ym)return 4*ym;
+  if(han>=13)return 4;if(han>=11)return 3;if(han>=8)return 2;if(han>=6)return 1.5;if(han==5)return 1;
+  if(han==4&&fu>=40)return 1;if(han==3&&fu>=70)return 1;return 0;
+}
+let BINDA=5;
+let ROUNDW=27; // 場風（27東〜30北、-1でなし）
+let RII=true; // 第一打牌で自動リーチ（+1翻）
+const BINDS=[[0,'縛りなし（役のみ）'],[2,'2翻縛り'],[3,'3翻縛り'],[4,'4翻縛り'],[5,'満貫縛り'],[6,'跳満縛り'],[8,'倍満縛り'],[11,'三倍満縛り'],[13,'役満縛り']];
+const bindName=()=>(BINDS.find(x=>x[0]==BINDA)||BINDS[4])[1];
+function meets(r){if(!r.hasYaku)return false;if(r.ym)return true;if(BINDA<=1)return true;if(BINDA==5)return tier(r.han,r.fu,0)>0;return r.han>=BINDA}
+function payMult(han,fu,ym){let m=tier(han,fu,ym);if(!m&&han>0&&!ym)m=[0,.2,.35,.5,.75][Math.min(han,4)];return m}
+function mjPoints(han,fu,ym,dealer){
+  let base;
+  if(ym)base=8000*ym;
+  else if(han>=13)base=8000;else if(han>=11)base=6000;else if(han>=8)base=4000;else if(han>=6)base=3000;
+  else base=Math.min(fu*Math.pow(2,han+2),2000);
+  return Math.ceil(base*(dealer?6:4)/100)*100;
+}
+const TNAME={1:'満貫',1.5:'跳満',2:'倍満',3:'三倍満',4:'役満'};
+function tileYaku(c){
+  let tot=0,hon=0,su=[0,0,0],anyYao=false,allYao=true,green=true;
+  for(let k=0;k<34;k++)if(c[k]){
+    tot+=c[k];if(k>=27)hon+=c[k];else su[k/9|0]+=c[k];
+    if(YAO(k))anyYao=true;else allYao=false;
+    if(![19,20,21,23,25,32].includes(k))green=false;
+  }
+  const sc=su.filter(x=>x>0).length,ym=[],n=[];
+  if(hon==tot)ym.push('字一色');
+  if(hon==0&&allYao)ym.push('清老頭');
+  if(green)ym.push('緑一色');
+  if(hon==0&&sc==1){const s=su.findIndex(x=>x>0),b=[3,1,1,1,1,1,1,1,3];if(b.every((v,i)=>c[s*9+i]>=v))ym.push('九蓮宝燈')}
+  if(!anyYao)n.push(['断幺九',1]);
+  if(allYao&&hon>0&&hon<tot)n.push(['混老頭',2]);
+  if(sc==1&&hon>0)n.push(['混一色',3]);
+  if(sc==1&&hon==0)n.push(['清一色',6]);
+  return {ym,n};
+}
+function scoreDecomp(c,dec,own,ow,ty){
+  const gs=dec.groups.map((g,i)=>({...g,open:!!ow&&ow.gi===i&&g.t=='t'}));
+  const tris=gs.filter(g=>g.t=='t'),seqs=gs.filter(g=>g.t=='s'),conc=tris.filter(g=>!g.open);
+  const names=[];let yh=0,ym=0;
+  ty.ym.forEach(x=>{ym++;names.push(x)});
+  const dr=tris.filter(g=>g.k>=31).length,wd=tris.filter(g=>g.k>=27&&g.k<31).length;
+  if(dr==3){ym++;names.push('大三元')}
+  if(wd==4){ym++;names.push('大四喜')}else if(wd==3&&dec.pair>=27&&dec.pair<31){ym++;names.push('小四喜')}
+  if(conc.length==4){ym++;names.push('四暗刻')}
+  if(ym)return {yh:0,ym,fu:30,names};
+  const A=(n,h)=>{yh+=h;names.push(n+' '+h+'翻')};
+  ty.n.forEach(([n,h])=>A(n,h));
+  const pairFu=(dec.pair>=31?2:0)+(dec.pair==ROUNDW?2:0)+(dec.pair==own?2:0);
+  if(seqs.length==4&&pairFu==0&&ow&&ow.wait=='ryan')A('平和',1);
+  const sk={};seqs.forEach(g=>sk[g.k]=(sk[g.k]||0)+1);
+  const pk=Object.values(sk).reduce((a,v)=>a+(v>>1),0);
+  if(pk>=2)A('二盃口',3);else if(pk==1)A('一盃口',1);
+  tris.forEach(g=>{if(g.k>=31)A('役牌'+tn(g.k),1);if(g.k==ROUNDW)A('場風'+tn(g.k),1);if(g.k==own)A('自風'+tn(own),1)});
+  for(let n=0;n<7;n++)if(sk[n]&&sk[9+n]&&sk[18+n]){A('三色同順',2);break}
+  for(let s=0;s<3;s++)if(sk[s*9]&&sk[s*9+3]&&sk[s*9+6]){A('一気通貫',2);break}
+  if(tris.length==4)A('対々和',2);
+  if(conc.length>=3)A('三暗刻',2);
+  for(let n=0;n<9;n++)if(tris.some(g=>g.k==n)&&tris.some(g=>g.k==9+n)&&tris.some(g=>g.k==18+n)){A('三色同刻',2);break}
+  if(dr==2&&dec.pair>=31)A('小三元',2);
+  if(tris.length<4&&YAO(dec.pair)&&gs.every(g=>g.t=='t'?YAO(g.k):(g.k%9==0||g.k%9==6))){
+    let hon=0;for(let k=27;k<34;k++)hon+=c[k];
+    if(hon>0)A('混全帯幺九',2);else A('純全帯幺九',3);
+  }
+  let fu=30;
+  tris.forEach(g=>{const b=YAO(g.k)?4:2;fu+=g.open?b:b*2});
+  fu+=pairFu;
+  if(ow&&['kan','pen','tanki'].includes(ow.wait))fu+=2;
+  fu=Math.ceil(fu/10)*10;
+  return {yh,ym:0,fu,names};
+}
+function waitOpts(dec,w){
+  if(w==null)return [null];
+  const o=[];
+  if(dec.pair==w)o.push({wait:'tanki',gi:-1});
+  dec.groups.forEach((g,i)=>{
+    if(g.t=='t'){if(g.k==w)o.push({wait:'sha',gi:i})}
+    else if(w>=g.k&&w<=g.k+2){
+      let t;if(w==g.k+1)t='kan';else if(w==g.k)t=g.k%9==6?'pen':'ryan';else t=g.k%9==0?'pen':'ryan';
+      o.push({wait:t,gi:i});
+    }
+  });
+  return o;
+}
+function scoreHand(c,opt,w){
+  const dc=opt.doras.reduce((a,d)=>a+c[d],0)+(opt.rd||0);
+  const fin=r=>{
+    const ri=RII&&!r.ym?1:0;
+    const yh=r.yh+ri,names=ri?[...r.names,'リーチ 1翻']:r.names;
+    const han=r.ym?13*r.ym:(yh>0?yh+dc:0);
+    return {...r,yh,names,dc,han,mult:r.ym?tier(0,0,r.ym):(yh>0?payMult(han,r.fu,0):0),hasYaku:yh>0||r.ym>0};
+  };
+  if(isKokushi(c))return fin({yh:0,ym:1,fu:30,names:['国士無双']});
+  const ty=tileYaku(c);let best=null;
+  const take=r=>{const f=fin(r);if(!best||f.mult>best.mult||(f.mult==best.mult&&f.han>best.han))best=f};
+  if(isChiitoi(c)){
+    if(ty.ym.length)take({yh:0,ym:ty.ym.length,fu:25,names:ty.ym});
+    else take({yh:2+ty.n.reduce((a,x)=>a+x[1],0),ym:0,fu:25,names:['七対子 2翻',...ty.n.map(x=>x[0]+' '+x[1]+'翻')]});
+  }
+  for(const dec of decomps(c))for(const ow of waitOpts(dec,w))take(scoreDecomp(c,dec,opt.own,ow,ty));
+  return best||fin({yh:0,ym:0,fu:30,names:[]});
+}
+function evalTenpai(c13,opt){
+  const waits=[];
+  for(let k=0;k<34;k++)if(c13[k]<4){c13[k]++;if(isWin34(c13))waits.push(k);c13[k]--}
+  const res={};let ok=waits.length>0;
+  waits.forEach(w=>{c13[w]++;res[w]=scoreHand(c13,opt,w);c13[w]--;if(!meets(res[w]))ok=false});
+  return {waits,res,ok};
+}
+
+/* ---------- CPU 作牌 ---------- */
+function cpuBuild(tiles,opt,cap=120000){
+  const c=cnt(tiles);
+  let best=null,bsc=-Infinity;
+  // opt.reds: 手に入る赤牌を翻に数える（縛りに届かない配牌でも、赤牌を使えば作れる場合がある）
+  const redK=opt.reds?[...new Set(tiles.filter(t=>t.red).map(t=>t.k))]:[];
+  const tryHand=c13=>{
+    const ev=evalTenpai(c13,redK.length?{...opt,rd:redK.filter(k=>c13[k]>0).length}:opt);
+    if(!ev.ok)return;
+    const bias=opt.pBias?ev.waits.reduce((a,w)=>a+opt.pBias[w],0):0;
+    const sc=bias+(opt.worst?-ev.waits.reduce((a,w)=>a+ev.res[w].mult+1,0):ev.waits.reduce((a,w)=>a+(4-c13[w])*10+ev.res[w].mult*(opt.vw||1),0));
+    if(sc>bsc){bsc=sc;best=c13.slice()}
+  };
+  // 国士
+  const dk=[];for(let k=0;k<34;k++)if(YAO(k)&&c[k])dk.push(k);
+  if(dk.length>=12){
+    const c13=Array(34).fill(0);dk.forEach(k=>c13[k]=1);
+    let n=dk.length;
+    if(n==12){const d=dk.find(k=>c[k]>=2);if(d!=null){c13[d]=2;n=13}}
+    if(n==13)tryHand(c13);
+  }
+  // 七対子
+  const pk=[];for(let k=0;k<34;k++)if(c[k]>=2)pk.push(k);
+  if(pk.length>=7)for(let r=0;r<40;r++){
+    const s=shuffle(pk.slice()).slice(0,7),c14=Array(34).fill(0);
+    s.forEach(k=>c14[k]=2);
+    const t=s[0];c14[t]--;tryHand(c14);
+  }
+  // 面子手
+  const GL=[];
+  for(let k=0;k<34;k++)GL.push({t:'t',k});
+  for(let k=0;k<27;k++)if(k%9<=6)GL.push({t:'s',k});
+  shuffle(GL);
+  const m=g=>g.t=='t'?[[g.k,3]]:[[g.k,1],[g.k+1,1],[g.k+2,1]];
+  const cands=new Map();let it=0;
+  const picked=[];
+  const dfs=s=>{
+    if(++it>cap)return;
+    if(picked.length==4){
+      for(let p=0;p<34;p++)if(c[p]>=2){
+        const d=Array(34).fill(0);d[p]=2;
+        picked.forEach(g=>m(g).forEach(([k,n])=>d[k]+=n));
+        const key=d.join('');if(cands.has(key))continue;
+        const ty=tileYaku(d);
+        const q=scoreDecomp(d,{pair:p,groups:picked.map(g=>({...g}))},opt.own,null,ty);
+        const dc=opt.doras.reduce((a,x)=>a+d[x],0);
+        const han=q.ym?13:((q.yh>0||RII)?q.yh+dc+(RII?1:0):0);
+        if(han>=Math.max(1,Math.min(4,BINDA)))cands.set(key,{d,han});
+      }
+      return;
+    }
+    for(let i=s;i<GL.length;i++){
+      const g=GL[i],mm=m(g);
+      if(!mm.every(([k,n])=>c[k]>=n))continue;
+      mm.forEach(([k,n])=>c[k]-=n);picked.push(g);
+      dfs(i);
+      picked.pop();mm.forEach(([k,n])=>c[k]+=n);
+      if(it>cap)return;
+    }
+  };
+  dfs(0);
+  const list=[...cands.values()].sort((a,b)=>opt.worst?a.han-b.han:b.han-a.han).slice(0,250);
+  const seen13=new Set();
+  for(const {d} of list)for(let t=0;t<34;t++)if(d[t]){
+    const c13=d.slice();c13[t]--;
+    const key=c13.join('');if(seen13.has(key))continue;seen13.add(key);
+    tryHand(c13);
+  }
+  if(!best)return null;
+  const pool=tiles.slice(),out=[];
+  for(let k=0;k<34;k++)for(let i=0;i<best[k];i++){let j=opt.reds?pool.findIndex(t=>t.k==k&&t.red):-1;if(j<0)j=pool.findIndex(t=>t.k==k);out.push(pool.splice(j,1)[0])}
+  return out;
+}
+
+/* ---------- ゲーム ---------- */
+let G,timerId=null;
+const say=s=>$('msg').textContent=s;
+let GEN=0;
+// 効果音: ブラウザの Web Audio でその場で合成する（音のファイルは使わない）
+const sfx=(()=>{
+  let ac=null,master=null,nb=null,lastZ=-9;
+  const ok=()=>{
+    if(typeof SET!='undefined'&&SET.sfx===false)return false;
+    const AC=typeof AudioContext!='undefined'?AudioContext:(typeof webkitAudioContext!='undefined'?webkitAudioContext:null);
+    if(!AC)return false;
+    if(!ac){try{
+      ac=new AC();master=ac.createGain();master.connect(ac.destination);
+      nb=ac.createBuffer(1,ac.sampleRate,ac.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    }catch(e){ac=null;return false}}
+    if(ac.state=='suspended')ac.resume();
+    master.gain.value=((typeof SET!='undefined'&&SET.vol!=null?SET.vol:70)/100)*.9;
+    return true;
+  };
+  const noise=(t,dur,f,q,g,type)=>{
+    const s=ac.createBufferSource();s.buffer=nb;s.loop=true;
+    const fl=ac.createBiquadFilter();fl.type=type||'bandpass';fl.frequency.value=f;fl.Q.value=q;
+    const ga=ac.createGain();ga.gain.setValueAtTime(g,t);ga.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(fl);fl.connect(ga);ga.connect(master);s.start(t,Math.random()*.5);s.stop(t+dur+.05);
+  };
+  const tone=(t,f0,f1,dur,g,type)=>{
+    const o=ac.createOscillator();o.type=type||'sine';
+    o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
+    const ga=ac.createGain();ga.gain.setValueAtTime(g,t);ga.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(ga);ga.connect(master);o.start(t);o.stop(t+dur+.05);
+  };
+  // ふくらんで消える音（うなり用）
+  const swell=(t,f,dur,g,type)=>{
+    const o=ac.createOscillator();o.type=type||'sine';o.frequency.value=f;
+    const ga=ac.createGain();ga.gain.setValueAtTime(.0001,t);ga.gain.linearRampToValueAtTime(g,t+dur*.3);ga.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(ga);ga.connect(master);o.start(t);o.stop(t+dur+.05);
+  };
+  const clack=(t,p,g)=>{noise(t,.03,2600*p,1.2,.9*g);noise(t,.012,6500*p,.8,.5*g,'highpass');tone(t,190*p,95*p,.07,.55*g)};
+  const ding=t=>{tone(t,2300,2250,.5,.16);tone(t,3450,3400,.35,.09);tone(t,5200,5100,.2,.04)};
+  return {
+    tile(){if(!ok())return;clack(ac.currentTime,.9+Math.random()*.25,1)},
+    tileLow(){if(!ok())return;clack(ac.currentTime,.72+Math.random()*.2,.9)},
+    select(){if(!ok())return;const t=ac.currentTime;noise(t,.02,3800,1,.3);tone(t,520,420,.03,.1)},
+    dice(){if(!ok())return;const t=ac.currentTime;
+      [0,.16,.3,.42,.52,.6,.68,.75,.82,.9,1.02,1.18,1.36].forEach((d,i)=>clack(t+d,.78+Math.random()*.35,Math.max(.25,1-i*.06)))},
+    stick(){if(!ok())return;ding(ac.currentTime)},
+    riichi(){if(!ok())return;const t=ac.currentTime;
+      noise(t,.4,1500,.5,.35,'highpass');tone(t,300,900,.35,.12,'triangle');ding(t+.5)},
+    ron(){if(!ok())return;const t=ac.currentTime;
+      tone(t,160,42,.7,1);noise(t,.3,280,.7,.8,'lowpass');tone(t+.02,320,110,.18,.4,'triangle');noise(t+.01,.09,3200,1,.5);
+      tone(t+.55,150,40,.8,.9);noise(t+.55,.3,260,.7,.6,'lowpass')},
+    zawa(){if(!ok())return;const t=ac.currentTime;if(t<lastZ+2.4)return;lastZ=t; // 重ならないように間隔をあける
+      swell(t,62,2.6,.09);swell(t,65.5,2.6,.08);swell(t,124,2.6,.025,'triangle');noise(t,2.4,180,.6,.03,'lowpass')},
+    bad(){if(!ok())return;const t=ac.currentTime;tone(t,240,120,.35,.22,'sawtooth');tone(t+.2,190,80,.45,.22,'sawtooth')},
+    swap(){if(!ok())return;const t=ac.currentTime;for(let i=0;i<8;i++)noise(t+Math.random()*.5,.05,2200+Math.random()*1800,1,.35)},
+    peek(){if(!ok())return;const t=ac.currentTime;tone(t,400,1700,.6,.12,'triangle');tone(t+.05,600,2400,.55,.06)}
+  };
+})();
+// 毛筆風の台詞（リーチ・ロン）。cb は表示後に呼ぶ
+function callout(txt,who,cb,cls){if(txt=='リーチ'){zawaBurst(7000);sfx.riichi();setExpr(who=='p'?'zawa':'win',who=='p'?6000:0);sayChar(who=='p'?'tense':'riichi')}if(txt=='ロン'){sfx.ron();setExpr(who=='c'?'win':'lose');sayChar(who=='c'?'win':'lose',6000)}const e=document.createElement('div');e.className='call '+who+(cls?' '+cls:'');e.innerHTML='<span>'+txt+'</span>';document.body.appendChild(e);setTimeout(()=>e.remove(),1500);if(cb)later(cb,1150)}
+// ゴロゴロ…ゴロゴロ… 演出（緊張する場面で、画面の端に擬音の文字を漂わせる）
+let ZW_UNTIL=0;
+function zawaBurst(ms){ZW_UNTIL=Math.max(ZW_UNTIL,Date.now()+ms)}
+function zawaSpawn(n){
+  sfx.zawa();
+  const T=['ゴロゴロ…','ゴロゴロ…','ゴロゴロ…ゴロゴロ…','…ゴロゴロ…','ゴロゴロ'];
+  for(let i=0;i<n;i++){
+    const e=document.createElement('div');e.className='zw';e.textContent=T[Math.random()*T.length|0];
+    const left=Math.random()<.5,sz=26+Math.random()*34;
+    e.style.fontSize=sz+'px';e.style.setProperty('--r',(Math.random()*30-15)+'deg');
+    e.style.top=(8+Math.random()*78)+'vh';
+    if(left)e.style.left=(1+Math.random()*16)+'vw';else e.style.right=(1+Math.random()*16)+'vw';
+    e.style.animationDelay=(i*.35)+'s';
+    document.body.appendChild(e);setTimeout(()=>e.remove(),3400+i*350);
+  }
+}
+function zawaLevel(){
+  if(SET.zawa===false||typeof G=='undefined'||!G||!G.p||G.phase=='over'||G.phase=='build'||G.phase=='dora')return 0;
+  if(G.phase=='ron'&&typeof ronOK=='function'&&ronOK())return 2;
+  if(Date.now()<ZW_UNTIL)return 1;
+  if((G.pb<=300||G.cb<=300)&&Math.random()<.5)return 1;
+  return 0;
+}
+{const iv=setInterval(()=>{try{const l=zawaLevel();if(l){zawaSpawn(l==2?3:2);if(l==2&&EXPR=='normal')setExpr('zawa',4000)}}catch(e){}},1500);if(iv&&iv.unref)iv.unref()}
+const later=(f,ms)=>{const g=GEN;setTimeout(()=>{if(g===GEN)f()},ms)};
+function init(){
+  GEN++;G={start:SET.blood,pb:SET.blood,cb:SET.blood,base:100,stake:100,roundNo:0,first:Math.random()<.5?'p':'c'};
+  syncOpp();$('cName').textContent=oppName();
+  if(SET.firstBy=='dice')diceStart();else newRound();
+}
+// サイコロ2個ずつ。目の大きい方が先手・後手を選ぶ（同じ目は振り直し）
+function diceStart(){
+  const F='⚀⚁⚂⚃⚄⚅',roll=()=>[1+Math.random()*6|0,1+Math.random()*6|0];
+  const wn=k=>k<0?'なし':tn(k),wf=wn(SET.oyako?27:SET.wFirst),ws=wn(SET.oyako?28:SET.wSecond);
+  const showD=(el,d)=>{el.textContent=F[d[0]-1]+' '+F[d[1]-1]+'　'+(d[0]+d[1])};
+  $('dice').style.display='flex';$('diceBtns').innerHTML='';
+  $('diceNote').textContent='先手＝'+(wf=='なし'?'自風なし':wf)+'　後手＝'+(ws=='なし'?'自風なし':ws);
+  const g=GEN;
+  const pick=f=>{G.first=f;$('dice').style.display='none';if(typeof diceHide3d=='function')diceHide3d();newRound()};
+  const decide=(p,c)=>{
+    if(g!==GEN)return;
+    const ps=p[0]+p[1],cs=c[0]+c[1];
+    if(ps==cs){$('diceMsg').textContent='同じ目！ 振り直し';later(attempt,1000);return}
+    if(ps>cs){
+      $('diceMsg').textContent='あなたの目が大きい。先手か後手を選べ。';
+      $('diceBtns').innerHTML='<button id="dFirst">先手（'+wf+'）</button><button id="dSecond">後手（'+ws+'）</button>';
+      $('dFirst').onclick=()=>pick('p');$('dSecond').onclick=()=>pick('c');
+    }else{
+      $('diceMsg').textContent=''+oppName()+'の目が大きい。'+oppName()+'は先手を選んだ。';
+      later(()=>pick('c'),1800);
+    }
+  };
+  function attempt(){
+    $('diceMsg').textContent='サイコロを振る……';
+    if(typeof dice3d=='function'){ // 3D版: 卓の上にサイコロを転がす
+      const p=roll(),c=roll();$('diceP').textContent='　';$('diceC').textContent='　';
+      $('diceMsg').textContent='あなたが振る……';sfx.dice();
+      dice3d(p,()=>{if(g!==GEN)return;showD($('diceP'),p);$('diceMsg').textContent=oppName()+'が振る……';
+        later(()=>{if(g!==GEN)return;sfx.dice();dice3d(c,()=>{if(g!==GEN)return;showD($('diceC'),c);later(()=>decide(p,c),600)})},800)});
+      return;
+    }
+    const spin=(el,fin,cb)=>{let n=0;const iv=setInterval(()=>{ // 2D版: あなた→相手の順に、一人ずつ振る
+      if(g!==GEN){clearInterval(iv);return}
+      showD(el,roll());sfx.select();
+      if(++n>=10){clearInterval(iv);showD(el,fin);cb()}
+    },90)};
+    const p=roll(),c=roll();$('diceP').textContent='　';$('diceC').textContent='　';$('diceMsg').textContent='あなたが振る……';
+    spin($('diceP'),p,()=>{$('diceMsg').textContent=oppName()+'が振る……';later(()=>spin($('diceC'),c,()=>later(()=>decide(p,c),600)),600)});
+  }
+  attempt();
+}
+function newRound(){
+  G.roundNo++;G.tip=false;setExpr('normal');if(G.roundNo==1||Math.random()<.35)sayChar('start');
+  {const mc=charOf(SET.char);if(mc&&mc.moody)mc.mood=[.15,.5,.9][Math.random()*3|0]}
+  say('配牌中……');
+  later(()=>{
+    BINDA=SET.bind;RII=SET.riichi;ROUNDW=SET.fieldRule?SET.field:-1;
+    // 縛りを満たす配牌が両者に出るまで配り直す（ドラは後から選ぶので、ドラなしで作れるかを基準にする）。
+    // 出ないときは縛りを一段ずつ緩める
+    const ladder=BINDS.map(x=>x[0]).filter(v=>v<=SET.bind).sort((x,y)=>y-x);
+    let deal=null,relaxed=false;
+    const guard=!SET.cheat&&SET.guard!='luck'; // 最低保証: 両者が縛りを超えるテンパイを作れる配牌だけ配る
+    for(let li=0;li<ladder.length&&!deal;li++){
+      BINDA=ladder[li];
+      const t0=Date.now();
+      let last=null;
+      do{
+        const deck=[];for(let k=0;k<34;k++)for(let i=0;i<4;i++)deck.push({k,id:uid++,glass:false,red:!!SET.red&&i==0&&(k==4||k==13||k==22),black:(SET.mode=='orig'?i>=3:SET.mode=='perkind'&&i>=SET.perKind)});
+        shuffle(deck);
+        if(SET.mode=='random')deck.slice(0,Math.round(deck.length*(1-SET.clear/100))).forEach(t=>t.black=true);
+        shuffle(deck);
+        const pw=deck.splice(0,54),cw=deck.splice(0,54);
+        const wf=SET.oyako?27:SET.wFirst,ws=SET.oyako?28:SET.wSecond;
+        const ownP=G.first=='p'?wf:ws,ownC=G.first=='p'?ws:wf;
+        const pool=pw.slice(0,34),cpool=cw.slice(0,34);
+        const cb=cpuBuild(cpool,{own:ownC,doras:[],reds:!!SET.red});
+        const pb=cb&&cpuBuild(pool,{own:ownP,doras:[],reds:!!SET.red});
+        last={pool,cpool,cb,pwall:[...pw.slice(34),...deck.slice(0,14)],cwall:[...cw.slice(34),...deck.slice(14,28)],ownP,ownC};
+        if(!guard||(cb&&pb)){deal=last;break}
+      }while(Date.now()-t0<(li==0?2500:1200));
+      if(!deal&&li==ladder.length-1)deal=last;
+      if(!deal)relaxed=true;
+    }
+    G.rf=G.first;G.relaxed=relaxed;G.peeks=0;G.swaps=0;G.pwIds=new Set(deal.pwall.slice(0,20).map(t=>t.id));G.cwIds=new Set(deal.cwall.slice(0,20).map(t=>t.id));G.cbFb=deal.cb;
+    G.dora={ind:null,ura:null,dk:[],uraOpen:false,walls:{l:deal.pwall,r:deal.cwall},wall:{l:deal.pwall,r:deal.cwall}};
+    G.p={pool:deal.pool.sort((a,b)=>a.k-b.k),sel:[],tenpai:[],hand:[],disc:[],waits:[],res:{},passed:false,own:deal.ownP};
+    G.c={pool:deal.cpool,tenpai:[],hand:[],disc:[],waits:[],res:{},own:deal.ownC};
+    G.danger=undefined;
+    $('buildBox').style.display='none';$('playBox').style.display='none';$('info').textContent='';
+    startDora();
+  },30);
+}
+const randomPick=list=>list[Math.random()*list.length|0];
+// ドラ表示牌: 先手が両サイドの山（各34枚）から、中身の見えない牌を1枚選ぶ
+// 親として計算するか。親子制度ONなら実際の親、OFFなら設定（offPts）で全員親か全員子
+function isDealer(who){return SET.oyako?who==(G.rf||G.first):SET.offPts=='oya'}
+function startDora(){
+  const w=G.dora.walls,all=[...w.l,...w.r];
+  if(SET.doraBy=='pick'){
+    G.phase='dora';
+    if(G.rf=='p'){say('ドラ表示牌を選べ。左右の山から好きな1枚（中身は見えない）。');render()}
+    else{say(''+oppName()+'がドラ表示牌を選んでいる……');render();later(()=>chooseDora(cpuPickDora(all)),1300)}
+  }else chooseDora(randomPick(all));
+}
+function cpuPickDora(all){
+  return randomPick(all);
+}
+const isBaka=()=>SET.opp=='baka';
+function bakaBuild(pool,opt){const sv=BINDA;BINDA=0;let cb;try{cb=cpuBuild(pool,{...opt,worst:true})}finally{BINDA=sv}return cb}
+// あなたの34枚のうち見えている透明牌は、あなたの河に出やすい。その牌を待ちにすると当たりやすい
+// 最強の老人は、あなたの切り方の傾向（字牌から切る・端の牌から切る等）を、対局のあいだ覚える。
+// 切る牌が見えている手牌の中でどの種類をどれだけ選んだかを数え、よく切る種類の牌を待ちに選ぶ
+const HCLS=k=>k>=27?0:(k%9==0||k%9==8)?1:(k%9==1||k%9==7)?2:3;
+function habitLearn(hand,t){
+  if(SET.opp!='max'||!t||t.black)return;
+  const H=G.habit||(G.habit={ch:[3,3,3,3],av:[3,3,3,3]});
+  const vis=hand.filter(x=>!x.black);if(!vis.length)return;
+  vis.forEach(x=>H.av[HCLS(x.k)]+=1/vis.length);H.ch[HCLS(t.k)]+=1;
+}
+const habitW=c=>{const H=G.habit;return H?Math.max(.3,Math.min(2.5,H.ch[c]/H.av[c])):1};
+function pBiasOf(C,k){
+  const own=cnt(C.pool),vp=cnt(G.p.pool.filter(t=>!t.black)),a=Array(34).fill(0);
+  for(let i=0;i<34;i++)a[i]=vp[i]*k*(SET.opp=='max'?habitW(HCLS(i)):1)+Math.max(0,4-own[i]-vp[i])*k*.25;
+  return a;
+}
+// イカサマ: 牌入れ替え。手牌(34枚)の1枚を、自分の山(20枚)のどれかと入れ替える。入れ替えのたびに、相手に見破られることがある
+function cheatCaught(who){
+  clearInterval(timerId);G.phase='over';sfx.bad();setExpr(who=='p'?'win':'lose');sayChar(who=='p'?'youCaught':'oppCaught',6000);
+  const winner=who=='p'?'c':'p',amt=Math.max(200,G.stake*2);
+  pay(winner,amt);
+  show('イカサマ発覚！（'+(who=='p'?'あなた':''+oppName()+'')+'）',(winner=='p'?''+oppName()+'':'あなた')+'が '+fmt(amt)+' を支払う。',document.createElement('div'),true);
+  G.stake=G.base;G.pushLock=false;G.first=SET.renchan?winner:(G.first=='p'?'c':'p');
+}
+function swapTiles(X,ids,wl,t,w){
+  const pi=X.pool.indexOf(t),wi=wl.indexOf(w);
+  X.pool[pi]=w;wl[wi]=t;ids.delete(w.id);ids.add(t.id);
+  X.pool.sort((a,b)=>a.k-b.k);
+}
+function playerSwap(){
+  if(!SET.cheat||G.phase!='build')return;
+  if(SET.swapMax-(G.swaps||0)<=0){say('もう入れ替えできない。');return}
+  const P=G.p,wl=G.dora.wall.l,keep=new Set(P.sel.map(x=>x.id));
+  const cand=shuffle(wl.filter(x=>G.pwIds.has(x.id)&&x!==G.dora.ind&&x!==G.dora.ura));
+  const others=shuffle(P.pool.filter(x=>!keep.has(x.id)));
+  const n=Math.min(others.length,cand.length);
+  if(!n){say('入れ替える牌がない。');return}
+  const kept=P.sel.length;
+  others.slice(0,n).forEach((o,i)=>swapTiles(P,G.pwIds,wl,o,cand[i]));
+  G.swaps++;
+  if(Math.random()*100<SET.caught)return cheatCaught('p');
+  sfx.swap();say('選んだ'+kept+'枚を残して、'+n+'枚を山とすり替えた……');
+  render();
+}
+// 老人も、配牌が縛りを超えられないときは入れ替える（孤立した牌を山の牌と取り替えて作り直す）
+function cpuCheat(C,d){
+  const wl=G.dora.wall.r;let cb=null;
+  for(let n=0;n<SET.swapMax&&!cb;n++){
+    const mine=shuffle(wl.filter(x=>G.cwIds.has(x.id)&&x!==d.ind&&x!==d.ura));if(!mine.length)break;
+    const c=cnt(C.pool);
+    const lone=t=>{const k=t.k;if(c[k]!=1)return false;if(k>=27)return true;const r=k%9;return !((r>0&&c[k-1])||(r>1&&c[k-2])||(r<8&&c[k+1])||(r<7&&c[k+2]))};
+    let outs=C.pool.filter(lone);
+    if(outs.length<6)outs=shuffle(C.pool.filter(t=>!lone(t))).slice(0,6-outs.length).concat(outs); // 少なすぎれば、他の牌も数枚替える
+    outs=outs.slice(0,mine.length);
+    outs.forEach((o,i)=>swapTiles(C,G.cwIds,wl,o,mine[i]));
+    if(Math.random()*100<SET.caught*(1-.6*cstyle().cheat)){cheatCaught('c');return {caught:true}} // イカサマが上手いキャラは見破られにくい
+    cb=cpuBuild(C.pool,{own:C.own,doras:d.dk,vw:buildVW()});
+  }
+  return {cb};
+}
+function chooseDora(t){
+  const d=G.dora;if(!d.walls)return;
+  // ドラ表示牌は山の上段に表向き、その真下の牌が裏ドラ表示牌（和了まで伏せたまま）
+  for(const side of [d.walls.l,d.walls.r]){
+    const i=side.indexOf(t);if(i<0)continue;
+    const o=i^1;if(i%2==0){side[i]=side[o];side[o]=t} // 選んだ牌が下段なら、上下を入れ替えて上段に
+    d.ura=side[(side.indexOf(t))^1];break;
+  }
+  d.ind=t;d.dk=[doraOf(t.k)];d.walls=null;
+  // 老人の作牌はドラが決まってから
+  const C=G.c;
+  C.bad=false;
+  const lv=SET.opp,pBias=(lv=='strong'||lv=='max')?pBiasOf(C,lv=='max'?6:3):null;
+  let cb=(isBaka()&&Math.random()<.7)?bakaBuild(C.pool,{own:C.own,doras:d.dk}):null;
+  if(isBaka()&&Math.random()<.2){ // 作牌ミス: 13枚を適当に選ぶ（テンパイしていないかも）
+    C.bad=true;cb=shuffle(C.pool.slice()).slice(0,13);
+  }
+  cb=cb||cpuBuild(C.pool,{own:C.own,doras:d.dk,pBias,vw:buildVW()})||(SET.red&&cpuBuild(C.pool,{own:C.own,doras:d.dk,pBias,vw:buildVW(),reds:true}))||G.cbFb||cpuBuild(C.pool,{own:C.own,doras:[]});
+  if(!cb&&SET.cheat){const r=cpuCheat(C,d);if(r.caught)return;cb=r.cb}
+  // 赤牌: 強い相手ほど、同じ種類の牌なら赤牌を選んで使う（牌の種類は変わらない）
+  if(cb&&SET.red&&!C.bad){
+    const pr={baka:0,weak:.15,normal:.4,strong:.8,max:1}[SET.opp]||0;
+    const used=new Set(cb.filter(t=>t.red).map(t=>t.id));
+    cb=cb.map(t=>{
+      if(t.red||Math.random()>=pr)return t;
+      const r=C.pool.find(x=>x.red&&x.k==t.k&&!used.has(x.id)&&!cb.includes(x));
+      if(!r)return t;
+      used.add(r.id);return r;
+    });
+  }
+  C.tenpai=cb||[];
+  if(cb){
+    const ids=new Set(cb.map(x=>x.id));
+    C.hand=C.pool.filter(x=>!ids.has(x.id)).sort((x,y)=>x.k-y.k);
+    C.tenpai.sort((x,y)=>x.k-y.k);
+    const ev=evalTenpai(cnt(C.tenpai),{own:C.own,doras:d.dk,rd:redN(C.tenpai)});
+    C.waits=ev.waits;C.res=ev.res;
+    if(C.bad&&ev.waits.length)C.bad=false; // たまたまテンパイしていた
+  }
+  G.phase='build';G.tleft=SET.time>0?SET.time:Infinity;
+  $('buildBox').style.display='';$('playBox').style.display='none';
+  $('buildTitle').textContent='作牌：34枚から'+(BINDA==0?'役あり':bindName().replace('縛り','以上'))+'のテンパイ13枚を選べ';
+  say(G.relaxed?'縛りに合う配牌が出ないため、今回は'+bindName()+'に緩めた。':'34枚から13枚を選べ。'+bindName()+'だ。');
+  clearInterval(timerId);timerId=setInterval(tick,1000);
+  render();
+}
+function tick(){
+  if(MENU)return;
+  if(G.phase!='build')return clearInterval(timerId);
+  if(--G.tleft<=0){clearInterval(timerId);confirmBuild(true)}
+  render();
+}
+function tileEl(t,cls=''){
+  const d=document.createElement('div');
+  if(t.k<27){d.className='t '+'mps'[t.k/9|0]+' '+cls;d.innerHTML=(t.k%9+1)+'<small>'+SN[t.k/9|0]+'</small>'}
+  else{    d.className='t z '+(t.k==31?'hw ':t.k==32?'hg ':t.k==33?'hr ':'')+cls;d.textContent=HON[t.k-27]}
+  if(t.red)d.classList.add('aka');
+  if(t.black&&!t.glass)d.classList.add('blk');
+  if(t.glass)d.classList.add('glass');
+  return d;
+}
+const backEl=()=>{const d=document.createElement('div');d.className='t back';return d};
+function furiten(X){return X.waits.some(w=>X.disc.some(t=>t.k==w))}
+// ロン牌のハイライト対象（設定オン・ロン待ちで、有効なロン牌のときだけ）
+function ronOK(){
+  if(G.phase!='ron'||!G.last||!G.p)return false;
+  const P=G.p;return P.waits.includes(G.last.k)&&!furiten(P)&&!P.passed;
+}
+function ronHL(){
+  if(!SET.ronhl||G.phase!='ron'||!G.last||!G.p)return null;
+  const P=G.p;
+  return P.waits.includes(G.last.k)&&!furiten(P)&&!P.passed?G.last:null;
+}
+function render(){
+  const P=G.p,C=G.c;
+  $('pCC').textContent=fmt(G.pb);$('cCC').textContent=fmt(G.cb);
+  $('pBar').style.width=Math.max(0,G.pb/G.start*100)+'%';$('cBar').style.width=Math.max(0,G.cb/G.start*100)+'%';
+  $('stake').textContent='賭けカリカリ '+fmt(G.stake)+(G.pushLock?'（倍プッシュ）':'')+'　第'+G.roundNo+(SET.match=='rounds'?'/'+SET.rounds:'')+'局';
+  $('dora').innerHTML='';if(G.dora.ind)$('dora').appendChild(tileEl(G.dora.ind));
+  {const wp=$('wallPanel');
+   if(G.phase=='dora'&&G.dora.walls){
+     wp.style.display='';
+     const fill=(el,arr)=>{el.innerHTML='';arr.forEach(t=>{const e=backEl();if(G.rf=='p')e.onclick=()=>chooseDora(t);el.appendChild(e)})};
+     fill($('wallL'),G.dora.walls.l);fill($('wallR'),G.dora.walls.r);
+   }else wp.style.display='none'}
+  {const f=G.rf||G.first;$('seat').textContent='あなたは'+(f=='p'?(SET.oyako?'親':'先手'):(SET.oyako?'子':'後手'))+'　自風：'+(P.own<0?'なし':tn(P.own))+(ROUNDW<0?'':'　場風：'+tn(ROUNDW))}
+  const t=G.tleft||0;$('timer').textContent=isFinite(t)?Math.floor(t/60)+':'+String(t%60).padStart(2,'0'):'∞';$('timer').className=t<=30?'low':'';
+  const rv=(el,arr)=>{el.innerHTML='';arr.forEach(x=>el.appendChild(tileEl(x)))};
+  rv($('cRiver'),C.disc);rv($('pRiver'),P.disc);
+  // 第一打牌はリーチ: 牌を横向きにして千点棒を出す
+  [['cRiver','cStick',C],['pRiver','pStick',P]].forEach(([r,st,X])=>{
+    const on=RII&&X.disc.length>0,r0=$(r).firstChild;if(on&&r0)r0.classList.add('rii');
+    $(st).style.display=on?'inline-block':'none';
+  });
+  if(ronHL()){const ch=$('cRiver').children;if(ch.length)ch[ch.length-1].classList.add('ronhl')}
+  $('bCheck').style.display=SET.verify?'':'none';
+  {const sl=SET.swapMax-(G.swaps||0);$('bSwap').style.display=(SET.cheat&&G.phase=='build')?'':'none';$('bSwap').textContent='選んだ牌以外を入れ替え　残り'+sl+'回';$('bSwap').disabled=sl<=0}if(!SET.verify)$('info').textContent='';
+  $('cMeta').textContent='河 '+C.disc.length+'/17　手札 '+C.hand.length+'枚';
+  const ct=$('cTen');ct.innerHTML='';
+  if(G.phase!='build')C.tenpai.forEach(x=>ct.appendChild(!x.black||x.glass||G.tip?tileEl(G.tip?{...x,glass:false}:x):backEl()));
+  const ch=$('cHandRow');ch.innerHTML='';
+  if(G.phase!='build')C.hand.forEach(x=>ch.appendChild(!x.black?tileEl(x):backEl()));
+  if(G.phase=='build'){
+    const sset=new Set(P.sel.map(x=>x.id));
+    const pl=$('pool');pl.innerHTML='';
+    P.pool.filter(x=>!sset.has(x.id)).forEach(x=>{const e=tileEl(x);e.onclick=()=>{if(P.sel.length<13){sfx.select();P.sel.push(x);P.sel.sort((a,b)=>a.k-b.k);render()}};pl.appendChild(e)});
+    const sl=$('sel');sl.innerHTML='';
+    P.sel.forEach(x=>{const e=tileEl(x);e.onclick=()=>{P.sel=P.sel.filter(y=>y.id!=x.id);render()};sl.appendChild(e)});
+    $('selN').textContent=P.sel.length;{const b=$('selBadge');b.textContent='選んだ '+P.sel.length+' / 13';b.className=P.sel.length==13?'full':P.sel.length>13?'over':''}
+  }else{
+    const pt=$('pTen');pt.innerHTML='';P.tenpai.forEach(x=>pt.appendChild(tileEl(x)));
+    $('pWaitInfo').textContent='待ち：'+P.waits.map(tn).join(' ')+(furiten(P)?'　【フリテン中】':P.passed?'　【見逃し：ロン不可】':'')+'　河 '+P.disc.length+'/17';
+    const ph=$('pHand');ph.innerHTML='';
+    P.hand.forEach((x,i)=>{const e=tileEl(x,P.waits.includes(x.k)?'wait':'');e.onclick=()=>discard(i);ph.appendChild(e)});
+    const ron=G.phase=='ron',mine=G.phase=='discard';
+    $('bRon').disabled=!ron;$('bPass').disabled=!ron;
+    syncOpp();$('cName').textContent=oppName();$('cName').textContent=oppName();
+    const left=SET.peekMax>0?SET.peekMax-(G.peeks||0):Infinity;
+    $('bPeek').style.display=SET.cheat?'':'none';
+    $('bPeek').textContent='透視 (-'+fmt(50)+')'+(isFinite(left)?'　残り'+left+'回':'');
+    $('bPeek').disabled=!(mine||ron)||G.pb<=50||left<=0||!C.tenpai.some(x=>x.black&&!x.glass);
+  }
+}
+$('bCheck').onclick=()=>{
+  const P=G.p;
+  if(P.sel.length!=13){$('info').textContent='13枚選んでから検証してください（現在 '+P.sel.length+'枚）';return}
+  const ev=evalTenpai(cnt(P.sel),{own:P.own,doras:G.dora.dk,rd:redN(P.sel)});
+  if(!ev.waits.length){$('info').textContent='テンパイしていません。';return}
+  if(SET.vmode=='simple'){$('info').textContent=ev.ok?'◎ '+bindName()+'を超えています':'✕ '+bindName()+'を超えていません';return}
+  let s=ev.ok?'◎ 有効（全ての待ちが'+bindName()+'を満たす）\n':'△ '+bindName()+'未満／役なしの待ちあり（その牌で上がるとチョンボ）\n';
+  ev.waits.forEach(w=>{const r=ev.res[w];s+='待ち '+tn(w)+'：'+(r.hasYaku?r.names.join('・')+(r.dc?' ドラ'+r.dc:'')+(r.ym?'':'　'+r.fu+'符'+r.han+'翻'):'役なし')+(meets(r)?'　→ OK'+(TNAME[r.mult]?'（'+TNAME[r.mult]+'）':''):'　→ 縛り未満')+'\n'});
+  $('info').textContent=s;
+};
+$('bSwap').onclick=playerSwap;
+$('bOk').onclick=()=>confirmBuild(false);
+function confirmBuild(timeout){
+  if(G.phase!='build')return;
+  clearInterval(timerId);
+  const P=G.p,C=G.c;
+  let ok=false;
+  if(P.sel.length==13){
+    const ev=evalTenpai(cnt(P.sel),{own:P.own,doras:G.dora.dk,rd:redN(P.sel)});
+    if(ev.waits.length){ok=true;P.waits=ev.waits;P.res=ev.res}
+  }
+  const cok=C.tenpai.length==13&&!C.bad;
+  if(!ok||!cok){
+    G.phase='over';
+    if(!ok&&!cok)return show('流局','両者の作牌が成立しなかった。',null,false);
+    return chombo(ok?'c':'p',timeout);
+  }
+  const ids=new Set(P.sel.map(x=>x.id));
+  P.tenpai=P.sel.slice();P.hand=P.pool.filter(x=>!ids.has(x.id)).sort((a,b)=>a.k-b.k);
+  $('buildBox').style.display='none';$('playBox').style.display='';
+  say(G.first=='p'?'あなたの先攻。切れ。':''+oppName()+'の先攻……');
+  if(G.first=='p'){G.phase='discard';render()}else{G.phase='busy';render();later(cpuTurn,800)}
+}
+function chombo(who,timeout,late){
+  sfx.bad();
+  // who: チョンボした側
+  G.phase='over';
+  const winner=who=='p'?'c':'p';
+  const amt=G.stake;
+  pay(winner,amt);
+  const box=document.createElement('div');
+  if(who=='c')showTiles(box,G.c.pool,''+oppName()+'の34枚');
+  show((late?'アガリチョンボ（縛りを満たさず和了）':'作牌チョンボ（'+(who=='p'?(timeout?'あなた：時間切れ/不成立':'あなた'):''+oppName()+'')+'）'),(winner=='p'?''+oppName()+'':'あなた')+'が '+amt+'cc を支払う。',box,true);
+  G.stake=G.base;G.pushLock=false;G.first=SET.renchan?winner:(G.first=='p'?'c':'p');
+}
+function lateChombo(tile){
+  G.phase='over';render();
+  const r=G.p.res[tile.k];
+  const why=!r||!r.hasYaku?'役がなかった':bindName()+'を満たさなかった（'+r.fu+'符'+r.han+'翻）';
+  const box=document.createElement('div');
+  showTiles(box,[...G.p.tenpai,tile],'あなたの和了形');
+  chombo('p',false,true);
+  const p=document.createElement('p');p.textContent='理由：'+why;
+  $('ovB').appendChild(p);$('ovB').appendChild(box);
+}
+function pay(winner,amt){
+  if(typeof PAYLOG!="undefined")PAYLOG.push([winner,amt,G.phase]);
+  if(winner=='p'){const a=Math.min(amt,G.cb);G.cb-=a;G.pb+=a}
+  else{const a=Math.min(amt,G.pb);G.pb-=a;G.cb+=a}
+}
+function discard(i){
+  if(G.phase!='discard')return;
+  habitLearn(G.p.hand,G.p.hand[i]);
+  const P=G.p,t=P.hand.splice(i,1)[0],first=P.disc.length==0;
+  sfx.tile();
+  P.disc.push(t);G.phase='busy';render();
+  if(G.c.waits.includes(t.k)&&!furiten(G.c))return finish('c',t);
+  next('c');
+  if(first&&RII){say('リーチ！　'+$('msg').textContent);callout('リーチ','p')}
+}
+function next(turn){
+  if(G.p.disc.length>=17&&G.c.disc.length>=17)return ryukyoku();
+  if(turn=='c'){say(''+oppName()+'が考えている……');later(cpuTurn,800)}
+  else{G.phase='discard';say('切れ。（残り'+(17-G.p.disc.length)+'歩）');render();try{tellFace()}catch(e){}}
+}
+// 表情の癖: あなたの手に相手の当たり牌が残っているとき、にやりと顔に出る。ブラフ値が高いキャラは出し方が嘘になる（無いのに見せる／あるのに隠す）
+function tellFace(){
+  const C=G.c,P=G.p;if(!C||!P||!C.waits||!C.waits.length||furiten(C))return;
+  const danger=P.hand.some(t=>C.waits.includes(t.k));
+  const bl=cstyle().bluff;
+  let show=danger&&Math.random()<.55;
+  if(Math.random()<bl*.6)show=danger?false:Math.random()<.55;
+  if(show)setExpr('win',3500);
+}
+// 透明牌は老人にも見える。あなたの13枚のうち透明牌を既知として、黒牌(伏せ)の中身を全通り試し、あり得る待ちを集める
+function dangerSet(){
+  const P=G.p,C=G.c;
+  const nb=P.tenpai.filter(t=>t.black).length;
+  if(nb>3)return null;
+  const known=cnt(P.tenpai.filter(t=>!t.black));
+  // 老人に見えている牌（自分の牌・河・ドラ表示・あなたの透明牌）の枚数から、あなたの伏せ牌になり得る残り枚数を出す
+  const vis=cnt([...C.tenpai,...C.hand,...C.disc,...P.disc,G.dora.ind,...P.tenpai.filter(t=>!t.black),...P.hand.filter(t=>!t.black)]);
+  const D=new Set(),c=known.slice();
+  const rec=(s,n)=>{
+    if(n==0){for(let k=0;k<34;k++)if(c[k]<4){c[k]++;if(isWin34(c))D.add(k);c[k]--}return}
+    for(let i=s;i<34;i++){
+      if(c[i]-known[i]>=4-vis[i])continue;
+      c[i]++;rec(i,n-1);c[i]--;
+    }
+  };
+  rec(0,nb);
+  return D;
+}
+// あなたの13枚を、見えている牌から全通り数え上げて読む。見えない黒牌の中身を、残り枚数に比例した重みで試す。
+// strict なら、縛りを満たすテンパイになる組み合わせだけを数える（あなたの13枚は縛りを満たしているはずなので、手役も読める）。
+// 戻り値: D=あり得る待ち牌の集合、prob=各牌が当たりになる確率（読み切れなければ null）
+function inferDanger(strict,hider='p',maxNb=4){
+  // hider: 手を読まれる側。通常はあなた('p')。テスト用に、あなた側から老人('c')を読むこともできる
+  const P=hider=='p'?G.p:G.c,C=hider=='p'?G.c:G.p,nb=P.tenpai.filter(t=>t.black).length;
+  const known=cnt(P.tenpai.filter(t=>!t.black));
+  const vis=cnt([...C.tenpai,...C.hand,...C.disc,...P.disc,G.dora.ind,...P.tenpai.filter(t=>!t.black),...P.hand.filter(t=>!t.black)]);
+  if(nb>maxNb)return {D:null,prob:null};
+  const opt={own:P.own,doras:G.dora.dk},prob=Array(34).fill(0),D=new Set();
+  const passSet=(hider=='p'&&!P.passed&&C.disc.length)?new Set(C.disc.map(t=>t.k)):null;
+  const binom=(n,k)=>k==0?1:k==1?n:k==2?n*(n-1)/2:n*(n-1)*(n-2)/6;
+  let W=0;const c=known.slice();
+  const rec=(i,left,wt)=>{
+    if(left==0){
+      const ev=evalTenpai(c,opt);
+      if(!ev.waits.length||(strict&&!ev.ok))return;
+      // 相手(読む側)が切った牌にあなたがロンしなかったなら、それは待ちではないはず（見逃し宣言をしていなければ）。大きく割り引く
+      let w2=wt;if(passSet)for(const w of ev.waits)if(passSet.has(w)){w2*=.08;break}
+      W+=w2;ev.waits.forEach(w=>{prob[w]+=w2;D.add(w)});return;
+    }
+    if(i>=34)return;
+    const rem=Math.max(0,4-vis[i]);
+    for(let m=0;m<=Math.min(left,rem);m++){c[i]+=m;rec(i+1,left-m,wt*binom(rem,m));c[i]-=m}
+  };
+  rec(0,nb,1);
+  if(!W)return {D:null,prob:null};
+  return {D,prob:prob.map(x=>x/W)};
+}
+function cpuTurn(){
+  const C=G.c,P=G.p;
+  if(C.disc.length>=17)return next('p');
+  const seen=Array(34).fill(0);
+  [...C.tenpai,...C.hand,...C.disc,...P.disc,G.dora.ind].forEach(t=>seen[t.k]++);
+  const pd=new Set(P.disc.map(t=>t.k));
+  const LV=SET.opp||'normal';
+  if(G.danger===undefined)G.danger=dangerSet();
+  let D=G.danger,prob=null;
+  if(LV=='weak')D=null; // 弱い: あなたの透明牌から待ちを読まない
+  if(LV=='strong'||LV=='max'){ // 縛りを満たす13枚だけに絞って待ちを読む
+    const inf=inferDanger(true,'p',4);if(inf.D)D=inf.D;if(LV=='max')prob=inf.prob;
+  }
+  let best=0,bs=1e9;
+  const heur=t=>{const r=t.k%9;const b=t.k>=27?1.5:(r==0||r==8?2.5:r==1||r==7?3.5:5);return b*(4-seen[t.k])/4};
+  if(isBaka()){
+    const bad=D?C.hand.map((t,i)=>D.has(t.k)?i:-1).filter(i=>i>=0):[];
+    best=(bad.length&&Math.random()<.5)?bad[Math.random()*bad.length|0]:Math.random()*C.hand.length|0;
+  }else if(LV=='weak'&&Math.random()<.45){
+    best=Math.random()*C.hand.length|0; // 弱い: ときどき適当に切る
+  }else C.hand.forEach((t,i)=>{
+    let d;
+    if(pd.has(t.k))d=0;
+    else if(prob)d=prob[t.k]*100+heur(t)*.02; // 最強: 当たる確率が最も低い牌
+    else if(D){d=D.has(t.k)?100+(cstyle().risk<.5?heur(t)*(1-cstyle().risk):0):1}
+    else d=heur(t);
+    d+=Math.random()*.6*(prob?.1:1)*(.4+1.2*cstyle().risk); // 攻め気が低いほどブレず、高いほどブレる
+    if(C.waits.includes(t.k))d+=1000;
+    if(d<bs){bs=d;best=i}
+  });
+  const t=C.hand.splice(best,1)[0];C.disc.push(t);G.last=t;
+  sfx.tileLow();
+  G.phase='ron';render();
+  if(C.disc.length==1&&RII)callout('リーチ','c');
+  say((C.disc.length==1&&RII?''+oppName()+'のリーチ！　':'')+''+oppName()+'が '+tn(t.k)+' を切った。ロンか、見送るか（右クリックで見送り）。');
+}
+$('bPass').onclick=()=>{
+  if(G.phase!='ron')return;
+  const P=G.p;
+  if(P.waits.includes(G.last.k)&&!furiten(P)&&!P.passed){P.passed=true;say('見逃した……この局、もうロンはできない。')}
+  G.phase='busy';render();
+  later(()=>next('p'),400);
+};
+$('bRon').onclick=()=>{
+  if(G.phase!='ron')return;
+  const P=G.p;
+  if(P.waits.includes(G.last.k)&&!furiten(P)&&!P.passed)return finish('p',G.last);
+  pay('c',100);say('錯和！ '+fmt(100)+' 献上……');render();
+  if(G.pb<=0)gameOver();
+};
+$('bPeek').onclick=()=>{
+  const C=G.c,cand=C.tenpai.filter(x=>x.black&&!x.glass);
+  if(!SET.cheat||G.pb<=50||!cand.length||(SET.peekMax>0&&(G.peeks||0)>=SET.peekMax))return;
+  G.peeks=(G.peeks||0)+1;zawaBurst(5000);sfx.peek();setExpr('zawa',5000);sayChar('tense');
+  const t=cand[Math.random()*cand.length|0];t.glass=true;
+  G.pb-=50;G.stake+=50;
+  const el=$('cTen');
+  say('透視！ '+oppName()+'の13枚のうち一枚、'+tn(t.k)+' が暴かれた。賭けカリカリ+50');
+  render();
+  if(G.pb<=0)gameOver();
+};
+function ryukyoku(){
+  G.phase='over';G.tip=true;render();
+  G.stake=G.pushLock?G.stake*2:Math.min(800,G.stake*2);if(!SET.renchan)G.first=G.first=='p'?'c':'p';
+  const box=document.createElement('div');
+  showTiles(box,G.c.tenpai,''+oppName()+'の13枚');showTiles(box,G.p.tenpai,'あなたの13枚');
+  show('流局','17歩切り切った。賭けカリカリは '+fmt(G.stake)+' に倍増して持ち越し。',box,true);
+}
+// 結果画面の牌: 透明牌か黒牌かが分かる本物風の絵。winLast=trueなら最後の1枚を和了牌として離して光らせる
+function rtEl(x){const d=document.createElement('i');d.className='rt';const row=(x.black?1:0)+(x.red&&(x.k==4||x.k==13||x.k==22)?2:0);d.style.backgroundPosition=(x.k*100/33)+'% '+(row*100/3)+'%';d.title=tn(x.k);return d}
+function showTiles(box,arr,label,winLast){
+  const q=document.createElement('div');q.className='meta';q.textContent=label;box.appendChild(q);
+  const w=document.createElement('div');w.className='tiles rts';w.style.justifyContent='center';
+  arr.forEach((x,i)=>{const e=rtEl(x);if(winLast&&i==arr.length-1)e.classList.add('winT');w.appendChild(e)});box.appendChild(w);
+}
+// 和了牌が赤牌なら、その分を足して点数を計算し直す
+function resOf(X,tile){
+  if(!tile.red)return X.res[tile.k];
+  const c=cnt(X.tenpai);c[tile.k]++;
+  return scoreHand(c,{own:X.own,doras:G.dora.dk,rd:redN(X.tenpai)+1},tile.k);
+}
+function finish(who,tile){
+  if(who=='p'){const r0=resOf(G.p,tile);if(!r0||!meets(r0))return lateChombo(tile)}
+  else{const r0=resOf(G.c,tile);if(!r0||!meets(r0)){
+    G.phase='over';render();callout('ロン','c',()=>{
+      const box=document.createElement('div');showTiles(box,[...G.c.tenpai,tile],''+oppName()+'の和了形');
+      chombo('c',false,true);
+      const p=document.createElement('p');p.textContent='理由：'+(!r0||!r0.hasYaku?'役がなかった':bindName()+'を満たさなかった（'+r0.fu+'符'+r0.han+'翻）');
+      $('ovB').appendChild(p);$('ovB').appendChild(box);
+    },'ron');return}}
+  G.phase='over';G.tip=true;render();
+  const X=who=='p'?G.p:G.c,Y=who=='p'?G.c:G.p;
+  const c14=cnt(X.tenpai);c14[tile.k]++;
+  // 裏ドラ
+  G.dora.uraOpen=true;
+  const uk=doraOf(G.dora.ura.k);
+  const uc=c14[uk];
+  const rdN=redN(X.tenpai)+(tile.red?1:0);
+  const opt={own:X.own,doras:G.dora.dk,rd:rdN};
+  const r=scoreHand(c14,opt,tile.k);
+  let han=r.han,mult=r.mult;
+  // 一発: 先手の第一打牌があたり牌だったとき（後手の和了、リーチはまだ宣言前でも）+1翻
+  const ip=(!r.ym&&RII&&X.disc.length==0&&Y.disc.length==1)?1:0,names=ip?[...r.names,'一発 1翻']:r.names;
+  if(!r.ym){han=r.yh+r.dc+uc+ip;mult=payMult(han,r.fu,0)}
+  let amt,note='';
+  if(SET.score=='mult'){
+    const dl=isDealer(who)?1.5:1;
+    amt=Math.round(G.stake*mult*dl);if(dl>1)note='（親の和了 ×1.5）';
+  }else{
+    // 麻雀の点数表: 子の満貫(8000点)＝賭けカリカリ。親の点数で全員計算する設定もある
+    const dealer=isDealer(who);
+    const pts=mjPoints(han,r.fu,r.ym,dealer);
+    amt=Math.max(1,Math.round(pts/80*G.stake/100));note='（'+pts+'点'+(dealer?'・親':'')+'）';
+  }
+  pay(who,amt);
+  const box=document.createElement('div');
+  const p1=document.createElement('div');
+  {const items=[...names];if(!r.ym){if(r.dc-rdN>0)items.push('ドラ '+(r.dc-rdN)+'翻');if(rdN)items.push('赤牌 '+rdN+'翻');if(uc)items.push('裏ドラ '+uc+'翻')}
+   const g=document.createElement('div');g.className='ykg';items.forEach(t=>{const e=document.createElement('span');e.textContent=t;g.appendChild(e)});p1.appendChild(g);
+   const sm=document.createElement('div');sm.className='yks';sm.textContent=(r.ym?'':r.fu+'符'+han+'翻　＝ ')+(TNAME[mult]||(SET.score=='mult'?'基本点×'+mult:r.fu+'符'+han+'翻'));p1.appendChild(sm)}
+  p1.className='yk';
+  showTiles(box,[...X.tenpai,tile],(who=='p'?'あなた':''+oppName()+'')+'の和了形（最後が和了牌）',true);
+  const ur=document.createElement('div');ur.className='doraBox';ur.style.gap='18px';[['ドラ',G.dora.ind],['裏ドラ',G.dora.ura]].forEach(([l,t])=>{const g=document.createElement('span');g.className='dgrp';g.innerHTML='<span class="meta">'+l+'</span>';g.appendChild(rtEl({k:doraOf(t.k),black:false}));ur.appendChild(g)});box.appendChild(ur);box.appendChild(p1);
+  callout('ロン',who,()=>show(who=='p'?'ロン！ いただきにゃ':'ロン…… 取られたニャ',(who=='p'?''+oppName()+'から ':''+oppName()+'に ')+fmt(amt)+note,box,true,true),'ron');
+  G.stake=G.base;G.pushLock=false;G.first=SET.renchan?who:(who=='p'?'c':'p');
+}
+function show(t,desc,box,reveal,descAfter){
+  $('ovT').textContent=t;$('ovB').innerHTML='';
+  const p=document.createElement('p');p.textContent=desc+'　（あなた '+fmt(G.pb)+' ／ '+oppName()+' '+fmt(G.cb)+'）';
+  if(descAfter){p.className='pay';if(box)$('ovB').appendChild(box);$('ovB').appendChild(p)}
+  else{$('ovB').appendChild(p);if(box)$('ovB').appendChild(box)}
+  $('ov').style.display='flex';$('ovPeek').style.display=(reveal&&G.tip)?'':'none';$('ovBack').style.display='none';$('ovPush').style.display='none';
+  const dead=G.pb<=0||G.cb<=0,mEnd=!dead&&SET.match=='rounds'&&G.roundNo>=SET.rounds;
+  $('ovTitle').style.display=(dead||mEnd)?'':'none';
+  if(dead){
+    $('ovBtn').textContent=G.pb<=0?(SET.unit=='chip'?'チップが尽きた……もう一度':SET.unit=='kibble'?'カリカリが尽きた……もう一度':'失血死……もう一度'):(SET.unit=='chip'?''+oppName()+'のチップを巻き上げた！もう一度':SET.unit=='kibble'?''+oppName()+'のカリカリを平らげた！もう一度':''+oppName()+'を干からびさせた！もう一度');
+    $('ovBtn').onclick=()=>{$('ov').style.display='none';init()};clearSave();
+  }else if(mEnd){
+    clearSave();$('ovBtn').textContent='最終結果へ';
+    $('ovBtn').onclick=matchResult;
+  }else{
+    $('ovBtn').textContent='次の局へ';
+    if(!G.pushLock){$('ovPush').style.display='';$('ovPush').onclick=()=>{$('ov').style.display='none';$('ovBack').style.display='none';$('ovPush').style.display='none';const acc=cpuAcceptPush();shout('倍プッシュにゃっ！！','p',1600);later(()=>{shout(acc?'受けて立つにゃっ！！':'だが、断るにゃっ！','c',1600);setExpr(acc?'win':'normal',1600);later(()=>{if(acc){G.stake*=2;G.pushLock=true}saveGame();newRound()},1700)},1700)}}
+    saveGame();
+    $('ovBtn').onclick=()=>{$('ov').style.display='none';$('ovBack').style.display='none';cpuMaybePush()};
+  }
+}
+function matchResult(){
+  const w=G.pb>G.cb?'勝利！':G.pb<G.cb?'敗北……':'引き分け';
+  $('ovT').textContent=SET.rounds+'局終了　'+w;
+  $('ovB').innerHTML='<p>あなた '+fmt(G.pb)+' ／ '+oppName()+' '+fmt(G.cb)+'</p><p>'+(G.pb>G.cb?unitW()+'で'+oppName()+'を上回った。':G.pb<G.cb?unitW()+'で'+oppName()+'に及ばなかった。':unitW()+'は同じ。')+'</p>';
+  $('ovBtn').textContent='もう一度';$('ovBtn').onclick=()=>{$('ov').style.display='none';init()};
+  $('ovTitle').style.display='';
+}
+function gameOver(){G.phase='over';show(G.pb<=0?(SET.unit=='chip'?'チップ切れ……':SET.unit=='kibble'?'カリカリ切れ……':'失血死……'):'勝利',G.pb<=0?(SET.unit=='chip'?'チップが尽きた。':SET.unit=='kibble'?'カリカリが尽きた。':'血が尽きた。'):(SET.unit=='chip'?''+oppName()+'のチップが尽きた。':SET.unit=='kibble'?''+oppName()+'のカリカリが尽きた。':''+oppName()+'は干からびた。'),null,false)}
+document.addEventListener("contextmenu",e=>{
+  if(e.target.closest&&e.target.closest("#ov,#setPanel,#rulePanel,#title,#bye"))return;
+  if(G&&G.phase=="ron"){e.preventDefault();$("bPass").onclick()}
+  else if(e.target.id=="cv")e.preventDefault();
+});
+const ORIG={fieldRule:false,field:-1,wFirst:27,wSecond:29,oyako:false,offPts:"ko",renchan:false,mode:"orig",firstBy:"dice",doraBy:"pick"};
+// 対戦相手24人の枠（強さ別: おばか2／弱い5／標準8／強い6／最強3）。未設定の枠は名前・絵・癖があとで入る。
+// style は癖（0〜1）。risk=攻め気、cheat=イカサマ好き、bluff=ざわ・賭けの出し方。bluff は表情の癖（tellFace）に使う：高いほど、あなたの手が危険かどうかの顔つきが当てにならない。
+/*LINES_BEGIN*/
+// キャラ別のセリフ。場面: start=局の開始 / riichi=相手のリーチ / tense=あなたのリーチ・透視 / win=相手がロン / lose=あなたがロン
+//  / oppCaught=相手のイカサマ発覚 / youCaught=あなたのイカサマ発覚
+// このファイルが元。index.html には `node syncfaces.js` で埋め込む。
+(function(g){
+g.LINES={
+ baka1:{start:'ニャッハー！',riichi:'いくぜぇ！ リーチだニャッハー！',tense:'にゃにを～～！！',win:'ニャッハー！！',lose:'うっ、うななななな',oppCaught:'う、嘘にゃ！ バレたのかにゃ！',youCaught:'ヒャッハー！ 見たぞ見たぞ！ イカサマにゃぁ！'},
+ baka2:{start:'私に限界など無い！',riichi:'ただ真実のアガリへの情熱だけだ',tense:'危険牌？ 限界など存在しない！',win:'リアル主義者になろう',lose:'振り込みが私を襲おうと、歓迎する',oppCaught:'私を撃て！',youCaught:'それが君のやり方か？'},
+ weak1:{start:'天才の私が相手をしてあげよう',riichi:'覚悟はいいか？',tense:'ん！？間違えたかな…',win:'俺は天才だ～～～っ！',lose:'うぁらば',oppCaught:'手が勝手に！！',youCaught:'俺に不可能はない'},
+ weak2:{start:'麻雀ですか…懐かしいですね。',riichi:'予言通りですね',tense:'見えていますよ',win:'その牌を切ることは予言されていましたよ',lose:'不老不死の私にとって一瞬のことです',oppCaught:'イカサマ？ いいえ、単なる「物質の錬金」です',youCaught:'エレガントではありませんね'},
+ weak3:{start:'見せて差し上げましょう、吾が軍略を',riichi:'機は熟した',tense:'むむぅ！',win:'策、成れり',lose:'一生の不覚！',oppCaught:'この私の目をもってしても見抜けなかった！',youCaught:'この私の目はごまかせません！'},
+ weak4:{start:'お客様、どうぞごゆるりとお楽しみくださいませ',riichi:'失礼ながら、チェックメイトでございます',tense:'返り討ちにして差し上げます',win:'これにて、お仕舞いでございます',lose:'次は、確実に仕留めます',oppCaught:'おや……お気づきになりましたか',youCaught:'少々、おいたが過ぎたようですね'},
+ weak5:{start:'強いやつと戦いたい',riichi:'リーチ',tense:'何っ！',win:'もっと強くなれ！',lose:'いつか…必ず…',oppCaught:'俺の拳を見切ったのか？',youCaught:'その程度か？'},
+ normal1:{start:'行きまーすにゃ！！',riichi:'あたれにゃ！',tense:'こいつ……やばいにゃ！',win:'この手は伊達じゃないにゃ！',lose:'たかが１回振り込んだけにゃ！',oppCaught:'しまったにゃ！',youCaught:'イカサマだにゃ、そいつは！'},
+ normal2:{start:'さぁ、打とうか',riichi:'リーチだ！',tense:'運か？力か？',win:'ロンだ！',lose:'もう一度だっ！',oppCaught:'俺の技が通じない！？',youCaught:'そいつはいけねぇな'},
+ normal3:{start:'かかってきにゃ！',riichi:'いくにゃっ',tense:'…やるじゃにゃあか',win:'オラオラにゃーっ！！',lose:'やれやれ…だにゃ',oppCaught:'やれやれ、こいつはやばいにゃ…',youCaught:'今、一瞬だけ時間をいじったにゃ…'},
+ normal4:{start:'冥府よりご免あそばせ',riichi:'ほーら、リーチよ！ 観念しなさい！',tense:'な、何よ！ 生意気ね！',win:'おーほほ！ いただきよ！',lose:'きぃー！ 覚えてらっしゃい！',oppCaught:'あたしの手が滑っただけよ！',youCaught:'あら、イカサマだなんて、いけない子ね'},
+ normal5:{start:'怪盗ニャパン参上',riichi:'さぁてお宝ちゃんはどこにあるのかにゃぁ～',tense:'へぇ〜、随分とお熱いお誘いだにゃ',win:'金庫を破るよりカンタンだったにゃ',lose:'ありゃ～、一本取られたにゃ',oppCaught:'手先が器用なマジックってやつにゃ',youCaught:'俺様の前でイカサマなんて10年早いにゃ'},
+ normal6:{start:'…始めて',riichi:'…リーチ',tense:'…私は、揺れない',win:'…上がり',lose:'…そう',oppCaught:'…失態。認める',youCaught:'…不正を確認した'},
+ normal7:{start:'ふふ……この牌の滑らかさ、私にふさわしいわ',riichi:'どうかしら？リーチよ',tense:'私を脅すつもり？',win:'すべて私に捧げなさい！',lose:'無礼者！ 万死に値するわ！！',oppCaught:'私がイカサマ？ 口を慎みなさい',youCaught:'愚か者が…私の目を盗めると思ったの？'},
+ normal8:{start:'見せてもらうにゃ。君の闘牌の腕前とやらを',riichi:'麻雀とは、いつも二手三手先を考えるものにゃ',tense:'振り込まなければ、大したことはないにゃ',win:'麻雀は非情にゃ……',lose:'まだ終わらんにゃ！',oppCaught:'私もよくよく運のない男だにゃ',youCaught:'若さゆえの過ちだにゃ'},
+ strong1:{start:'今宵の闘牌は一味違うにゃ！',riichi:'今宵のリーチは一味違うにゃ！',tense:'恐れるに足らんにゃ。我が守りに敵はにゃい',win:'また、くだらぬ手を和了ってしまったにゃ…',lose:'また、余計な牌を切ってしまったにゃ…',oppCaught:'不覚にゃ…',youCaught:'無情にゃ…'},
+ strong2:{start:'さぁ私の舞で岩戸を開きましょうか',riichi:'私の舞を見て',tense:'困ったわね',win:'私の舞に見惚れすぎたのね',lose:'なんてことでしょう',oppCaught:'私の舞を見抜かれたの？',youCaught:'あなたの舞には騙されませんよ'},
+ strong3:{start:'こいにゃ！',riichi:'あにゃにゃにゃにゃにゃーーーっ',tense:'俺にも後退はないにゃ！！',win:'終わりの時が来たのにゃ！！',lose:'ぐにゃっ！',oppCaught:'な・・・何見破られたにゃ！！',youCaught:'おもしろい見世物だにゃ'},
+ strong4:{start:'貴様は、今までに掴んだ牌を覚えているのかにゃ？',riichi:'にゃん弱ゥ！ にゃん弱ゥッ！',tense:'無駄だ、無駄だぁっ！',win:'最高にノッてきたにゃァァァッ！',lose:'ばかにゃああああっ！',oppCaught:'貴様！ 覗いたにゃッ！',youCaught:'うにゃぁぁぁぁぁぁっ！'},
+ strong5:{start:'ふふ、楽しませてちょうだい',riichi:'欲しくてたまらないわ',tense:'あら、随分と勇気があるのね',win:'ロン。……ふふ、魔術の生贄は揃ったわ',lose:'私の秘伝の毒が効かなかったというの？',oppCaught:'私がイカサマ？ これはただの「呪術」よ',youCaught:'そんなお些末なイカサマ、児戯に等しいわね'},
+ max1:{start:'運命を見せなさい',riichi:'光はここに。リーチ',tense:'…影が差した？ いいえ、気のせい',win:'光は、勝者を選びます',lose:'陽は沈み、また昇る…',oppCaught:'…私の過ち。受けましょう',youCaught:'偽りは、日の下では隠せません'},
+ max2:{start:'卓上は無限だにゃ',riichi:'リーチしろって言うのにゃ。直感にゃ',tense:'部長ならこの後どう逃げるかにゃ？',win:'ロンしろって言うのにゃ。直感にゃ',lose:'貴様、いい腕をしているにゃ。',oppCaught:'あなたも勘が働くようになってきたのかにゃ？',youCaught:'イカサマだと言うのにゃ。直感にゃ'},
+ max3:{start:'始めようかね諸君',riichi:'「正義の告発」を開始する！ ――リーチ！！',tense:'降りろというのか？',win:'必然の結果だ！',lose:'なるほど。私から点棒を奪うか',oppCaught:'私がイカサマをしただと？',youCaught:'私はこれを絶対に許さない！'},
+ max4:{start:'配牌ヨシッ！作牌ヨシッ！',riichi:'和了牌ヨシッ！点棒ヨシッ！',tense:'安牌ヨシッ！安全ヨシッ！',win:'当たり牌ヨシッ！点数ヨシッ！',lose:'振込ヨシッ！支払いヨシッ！',oppCaught:'俺じゃない、アイツがやった、知らない、過ぎたこと',youCaught:'手元注意ヨシッ！足元注意ヨシッ！'}
+};
+})(typeof window!=="undefined"?window:globalThis);
+
+/*LINES_END*/
+/*FACES_BEGIN*/
+// 劇画調の顔（SVG）。部品の組み合わせで24人分を描く。
+// このファイルが元。index.html には `node syncfaces.js` で埋め込む。
+(function(g){
+const K='#111';
+const LN=w=>`stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const P=(d,fill,w=3)=>`<path d="${d}" fill="${fill}" ${LN(w)}/>`;
+const T=(d,w=2)=>`<path d="${d}" fill="none" ${LN(w)}/>`;
+const HEAD={
+  sharp:'M52 72 L58 144 L82 178 L100 188 L118 178 L142 144 L148 72 Q146 38 100 36 Q54 38 52 72Z',
+  square:'M50 72 L54 150 L78 178 L100 184 L122 178 L146 150 L150 72 Q148 38 100 36 Q52 38 50 72Z',
+  round:'M50 90 Q48 40 100 38 Q152 40 150 90 Q154 150 100 182 Q46 150 50 90Z',
+  long:'M62 64 L66 140 L88 180 L100 192 L112 180 L134 140 L138 64 Q136 34 100 32 Q64 34 62 64Z',
+  chubby:'M38 92 Q38 36 100 34 Q162 36 162 92 Q168 150 140 176 Q100 202 60 176 Q32 150 38 92Z',
+  fem:'M58 76 Q58 40 100 38 Q142 40 142 76 L138 130 Q130 164 100 182 Q70 164 62 130Z',
+  fem2:'M56 82 Q54 42 100 38 Q146 42 144 82 L138 132 Q128 166 100 178 Q72 166 62 132Z'
+};
+// ---- 髪 ----  {b:顔の後ろ, f:顔の前}
+const HAIR={
+  bald:()=>({b:'',f:''}),
+  mohawk:c=>({b:'',f:P('M74 54 L70 20 L82 34 L80 -4 L92 26 L96 -12 L104 -12 L108 26 L120 -4 L118 34 L130 20 L126 54 Q100 44 74 54Z',c)+T('M84 48 L82 24 M92 46 L92 14 M100 46 L100 8 M108 46 L108 14 M116 48 L118 24',1.5).replace(K,'#8a6a10')+`<ellipse cx="60" cy="72" rx="5" ry="12" fill="${K}" opacity=".55"/><ellipse cx="140" cy="72" rx="5" ry="12" fill="${K}" opacity=".55"/>`}),
+  spiky:c=>({b:'',f:P('M50 80 L40 44 L62 54 L56 16 L78 40 L84 6 L98 34 L112 2 L120 36 L140 12 L138 46 L162 34 L150 80 L138 64 Q100 50 62 64Z',c)}),
+  mess:c=>({b:'',f:P('M50 82 L38 56 L60 58 L50 28 L76 46 L86 18 L100 44 L118 8 L124 42 L148 24 L142 56 L164 62 L150 84 L136 66 Q100 54 62 68Z',c)}),
+  curly:c=>({b:'',f:[[48,70,17],[56,48,17],[74,34,17],[96,28,17],[118,30,17],[138,40,17],[152,58,16],[154,82,14],[46,92,13],[66,62,14],[90,52,13],[116,54,13],[138,66,13],[72,76,9],[94,72,9],[114,74,9],[132,78,9]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="${c}" ${LN(2.8)}/>`).join('')+T('M68 40 q6 -9 12 0 q6 -7 10 2 M104 34 q6 -9 12 0 M132 46 q6 -8 12 0 M56 62 q6 -8 12 0 M96 56 q5 -7 10 0',1.6)}),
+  allback:c=>({b:P('M50 80 L46 104 L56 100Z M150 80 L154 104 L144 100Z',c,2.4),f:P('M52 84 Q44 34 100 28 Q156 34 148 84 L146 66 Q100 44 54 66Z',c)+T('M64 62 Q96 42 136 60 M70 52 Q100 36 130 50 M58 72 Q96 52 142 72',1.4).replace(K,'#888')}),
+  short:c=>({b:'',f:P('M50 86 Q46 34 100 30 Q154 34 150 86 L146 70 Q130 52 100 54 Q70 52 54 70Z',c)+P('M50 86 L52 106 L58 94Z M150 86 L148 106 L142 94Z',c,2.4)}),
+  semi:c=>({b:P('M44 130 L44 70 Q54 26 100 24 Q146 26 156 70 L156 130 L148 152 L138 124 L132 80 L68 80 L62 124 L52 152Z',c),f:P('M52 104 L50 66 Q62 30 100 28 Q138 30 150 66 L148 104 L140 122 L136 84 Q116 74 100 54 Q84 74 64 84 L60 122Z',c)+T('M72 44 Q84 32 104 32 M118 36 Q132 42 138 58',1.8).replace(K,'#9fb0e0')}),
+  shoulder:c=>({b:P('M42 130 L42 70 Q52 26 100 24 Q148 26 158 70 L158 130 L166 170 L150 200 L138 150 L132 80 L68 80 L62 150 L50 200 L34 170Z',c),f:P('M52 104 L50 66 Q62 30 100 28 Q138 30 150 66 L148 104 L142 130 L136 84 Q116 74 100 54 Q84 74 64 84 L58 130Z',c)+T('M72 44 Q84 32 104 32 M118 36 Q132 42 138 58 M52 140 L46 188 M148 140 L154 188',1.6).replace(K,'#aaa')}),
+  helmet:c=>{const h='#e8c860';return {b:'',f:P('M46 96 Q40 28 100 24 Q160 28 154 96 L148 76 Q100 54 52 76Z',c)+P('M46 96 L48 112 L62 108 L60 84Z M154 96 L152 112 L138 108 L140 84Z',c,2.8)+P('M94 26 L100 4 L106 26Z',c,2.6)+T('M60 50 Q76 34 96 32',2).replace(K,'#aaa')+P('M52 78 L58 100 L68 82 L76 104 L86 84 L96 106 L106 84 L116 106 L126 84 L134 104 L142 82 L148 100 L150 78Q100 62 52 78Z',h,2.6)+P('M46 108 L46 128 L58 124 L60 112Z M154 108 L154 128 L142 124 L140 112Z',h,2.6)}},
+  slick:c=>({b:P('M50 80 L46 110 L54 108Z M150 80 L154 110 L146 108Z',c,2.4),f:P('M50 80 Q44 32 100 26 Q156 32 150 80 L142 64 Q124 44 98 50 Q76 44 58 66Z',c)+T('M64 56 Q92 38 132 52 M72 66 Q96 52 128 62',1.4).replace(K,'#fff')}),
+  sweep:c=>({b:P('M50 80 L44 124 L56 116Z M150 80 L156 124 L144 116Z',c,2.4),f:P('M48 84 Q40 30 100 24 Q164 30 152 84 L146 56 Q120 40 96 56 Q84 76 66 70 Q56 74 52 90Z',c)+T('M70 44 Q100 30 138 50',1.4).replace(K,'#fff')}),
+  topknot:c=>({b:'',f:P('M96 38 Q92 22 100 14 Q108 22 104 38Z',c)+P('M56 76 Q64 52 100 48 Q136 52 144 76 L134 66 Q100 56 66 66Z',c,2.6)+P('M52 76 L48 114 L60 120 L58 82Z M148 76 L152 114 L140 120 L142 82Z',c,2.4)}),
+  bob:c=>({b:P('M46 124 L46 66 Q56 24 100 22 Q144 24 154 66 L154 124 L140 132 L138 86 Q118 78 100 58 Q82 78 62 86 L60 132Z',c),f:P('M52 100 L50 62 Q60 26 100 24 Q140 26 150 62 L148 100 L138 120 L134 84 Q116 76 100 58 Q84 76 66 84 L62 120Z',c)+T('M72 42 Q84 30 104 30 M118 34 Q132 40 138 56',1.8).replace(K,'#c9d0ea')}),
+  bobPlain:c=>({b:P('M48 118 L48 66 Q58 26 100 24 Q142 26 152 66 L152 118 L140 124 L140 86 L60 86 L60 124Z',c),f:P('M54 92 L52 64 Q62 28 100 26 Q138 28 148 64 L146 92 Q126 84 100 62 Q74 84 54 92Z',c)}),
+  long:c=>({b:P('M42 124 L40 64 Q56 20 100 18 Q144 20 160 64 L158 124 L168 176 L156 214 L44 214 L32 176Z',c),f:P('M52 100 L50 62 Q64 28 100 28 Q136 28 150 62 L148 100 Q140 80 120 70 Q110 88 92 82 Q76 80 64 88Z',c)+T('M52 130 L48 200 M64 120 L58 204 M148 130 L152 200 M136 120 L142 204',1.4)}),
+  longMess:c=>({b:P('M42 124 L40 64 Q56 20 100 18 Q144 20 160 64 L158 124 L170 180 L150 216 L142 170 L136 130 L64 130 L58 170 L50 216 L30 180Z',c),f:P('M48 104 L44 62 Q60 22 100 22 Q140 22 156 62 L152 104 L146 96 L142 80 L134 94 L128 78 L118 92 L112 76 L100 90 L92 76 L84 92 L74 78 L68 94 L58 80 L54 96Z',c)+T('M60 50 Q76 30 96 30 M104 30 Q126 32 142 52 M66 62 L76 84 M96 56 L100 82 M128 60 L122 82',1.6).replace(K,'#999')}),
+  raggedShort:c=>({b:'',f:HAIR.longMess(c).f}),
+  hime:c=>({b:P('M40 124 L38 64 Q54 20 100 18 Q146 20 162 64 L160 124 L166 216 L34 216Z',c),f:P('M48 100 L48 64 Q62 28 100 26 Q138 28 152 64 L152 100 L144 130 L140 84 L60 84 L56 130Z',c)+T('M70 44 Q100 32 130 44',1.6).replace(K,'#6a6a8a')}),
+  wavy:c=>({b:P('M42 120 L40 64 Q56 20 100 18 Q144 20 160 64 L158 120 Q172 140 162 164 Q172 186 158 204 Q146 214 132 206 L68 206 Q54 214 42 204 Q28 186 38 164 Q28 140 42 120Z',c),f:P('M50 100 L48 62 Q62 26 100 26 Q140 26 152 62 L150 100 Q146 82 126 72 Q112 90 90 82 Q70 80 60 98Z',c)}),
+  updo:c=>({b:P('M44 120 L42 66 Q50 40 100 40 Q150 40 158 66 L156 120Z',c,2.4),f:P('M58 100 L54 66 Q62 36 100 34 Q138 36 146 66 L142 100 Q134 82 116 74 Q108 88 92 80 Q72 78 58 100Z',c)+`<ellipse cx="100" cy="22" rx="30" ry="22" fill="${c}" ${LN(3)}/>`+T('M80 20 Q100 6 120 20',1.4).replace(K,'#fff')}),
+  twin:c=>({b:P('M36 104 Q24 140 34 184 L56 184 Q58 150 54 106Z M164 104 Q176 140 166 184 L144 184 Q142 150 146 106Z',c),f:P('M52 100 L50 62 Q64 28 100 28 Q136 28 150 62 L148 100 Q140 80 120 70 Q110 88 92 82 Q76 80 64 88Z',c)}),
+  bowl:c=>({b:'',f:P('M46 98 Q40 34 100 28 Q160 34 154 98 L146 82 Q100 56 54 82Z',c)}),
+  cap:c=>({b:'',f:P('M46 80 Q46 28 100 26 Q154 28 154 80 Q100 68 46 80Z',c)+P('M52 76 L148 76 L158 90 L44 90Z',c,2.6)+`<circle cx="100" cy="46" r="3" fill="#ddd"/>`+T('M60 90 Q74 112 70 134',2)}),
+  crownHair:c=>({b:'',f:P('M46 98 Q40 40 100 36 Q160 40 154 98 L146 84 Q100 62 54 84Z',c)})
+};
+// ---- 体 ----
+const SH='M26 240 L38 208 L72 194 L128 194 L162 208 L174 240Z';
+const BODY={
+  suit:(c,s)=>P(SH,c)+P('M84 196 L100 226 L116 196 L108 192 L100 208 L92 192Z',s||'#f2f2f2',2.4),
+  jacket:c=>P(SH,c)+P('M58 206 L90 203 L100 232 L66 236Z M142 206 L110 203 L100 232 L134 236Z','#3a332e',2.6)+`<path d="M30 214 L14 184 L52 200Z M170 214 L186 184 L148 200Z" fill="#cfcfcf" ${LN(3)}/>`,
+  kimono:c=>P(SH,c)+P('M84 196 L112 240 L100 240 L76 202Z','#eee',2.4)+T('M116 198 L96 240',2.4),
+  dress:(c,sk)=>P(SH,c)+P('M82 196 L100 224 L118 196Z',sk,2.4),
+  bare:(c,sk)=>P('M26 240 L36 204 L72 194 L128 194 L164 204 L174 240Z',sk)+T('M100 196 L100 240 M70 214 Q86 232 100 222 M130 214 Q114 232 100 222',2.4)+[[80,206],[90,212],[110,212],[120,206],[84,224],[100,230],[116,224]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.2" fill="${K}"/>`).join(''),
+  cape:c=>`<path d="M14 240 L24 196 L176 196 L186 240Z" fill="${c}" ${LN(3)}/>`+P('M30 210 Q100 244 170 210 L172 232 Q100 256 28 232Z','#f4f0e8',2.6)+`<g fill="${K}"><circle cx="60" cy="226" r="2"/><circle cx="90" cy="236" r="2"/><circle cx="120" cy="236" r="2"/><circle cx="148" cy="226" r="2"/></g>`,
+  robe:(c,t)=>P(SH,c)+T('M82 196 L100 232 L118 196',4).replace(K,t)+T('M36 214 Q100 228 164 214',3).replace(K,t),
+  coat:c=>P(SH,c)+P('M70 188 L88 200 L84 234 L52 226Z M130 188 L112 200 L116 234 L148 226Z',c,3),
+  gi:(c,s)=>P(SH,c)+T('M84 196 L100 216 L116 196',3)+P('M60 226 L140 226 L140 240 L60 240Z',s,2.4)
+};
+// ---- 目（左目の形。右は鏡）----
+const IRIS=(c,r)=>`<circle cx="80" cy="110" r="${r}" fill="${c}" ${LN(2)}/><circle cx="80" cy="110" r="${r*.45}" fill="${K}"/><circle cx="77.5" cy="107.5" r="${r*.3}" fill="#fff"/>`;
+const EYE={
+  slit:()=>P('M64 110 Q78 101 94 112 Q78 118 64 110Z','#fff',2.8)+`<circle cx="80" cy="110" r="3.2" fill="${K}"/>`+T('M64 110 Q78 101 94 112',4.2)+T('M66 121 Q80 128 92 121',1.5),
+  slitY:()=>P('M64 110 Q78 101 94 112 Q78 118 64 110Z','#fff',2.8)+`<circle cx="80" cy="110" r="3.2" fill="${K}"/>`+T('M64 110 Q78 101 94 112',3.8),
+  bug:()=>P('M62 112 Q78 98 94 112 Q78 126 62 112Z','#fff',3)+`<circle cx="79" cy="112" r="3.4" fill="${K}"/>`+T('M64 124 Q78 134 92 124',1.6),
+  dot:()=>`<ellipse cx="79" cy="110" rx="11" ry="9" fill="#fff" ${LN(3)}/><circle cx="80" cy="111" r="3.4" fill="${K}"/>`,
+  stern:()=>P('M64 112 Q78 100 94 110 Q78 120 64 112Z','#fff',2.8)+`<circle cx="81" cy="111" r="3.4" fill="${K}"/>`+T('M64 112 Q78 100 94 110',4.4)+T('M66 122 Q78 128 90 122',1.5),
+  lazy:()=>P('M64 112 Q78 109 94 112 Q78 121 64 112Z','#fff',2.6)+`<circle cx="80" cy="114" r="3.2" fill="${K}"/>`+T('M62 111 L96 111',4.6),
+  closed:()=>T('M64 112 Q79 106 95 112',4.2)+T('M70 120 Q80 124 90 120',1.4),
+  closedY:()=>T('M64 112 Q79 106 95 112',4),
+  crazy:()=>P('M62 110 Q78 94 94 110 Q78 126 62 110Z','#fff',3)+`<circle cx="76" cy="108" r="2.6" fill="${K}"/>`,
+  // 女性
+  fBig:i=>P('M62 112 Q78 94 94 112 Q78 130 62 112Z','#fff',3)+IRIS(i,9)+T('M62 112 Q78 94 94 112',4.4)+T('M62 112 L56 106',3),
+  fCalm:i=>P('M64 110 Q79 101 95 110 Q79 118 64 110Z','#fff',2.4)+IRIS(i,5.6).replace(/stroke-width="2"/,'stroke-width="1.4"')+T('M64 110 Q79 101 95 110',4)+T('M64 110 L57 105',3)+T('M67 115 Q79 120 92 115',1),
+  fLazy:i=>P('M64 112 Q79 106 95 112 Q79 120 64 112Z','#fff',2.4)+IRIS(i,5.2).replace('cy="110"','cy="113"').replace('cy="110"','cy="113"').replace('cy="107.5"','cy="110.5"')+T('M62 111 Q79 105 96 111',4.6)+T('M62 111 L55 106',3)
+};
+const BROWS={angry:'M58 90 L94 102',flat:'M60 97 L95 96',arch:'M62 98 Q78 86 95 95',worry:'M60 101 L95 91',rise:'M62 94 Q78 80 95 90'};
+const NOSE={
+  long:T('M100 104 L93 142 L107 147',3)+T('M88 143 Q97 153 110 146',2.4),
+  hook:T('M100 104 L94 140 Q104 152 112 142',3),
+  short:T('M99 116 L96 136 L104 138',2.4),
+  fine:T('M100 108 L96 136 L104 139',2.2)
+};
+const MOUTH={
+  flat:()=>T('M82 158 L118 158',3.6)+T('M92 164 L108 164',1.4),
+  frown:()=>T('M84 164 Q100 154 116 164',3.4),
+  smirk:()=>T('M84 158 Q100 162 118 150',3.4)+T('M118 150 L121 146',2),
+  smile:()=>T('M82 154 Q100 172 118 154',3.4),
+  grin:()=>`<path d="M66 154 Q100 162 134 154 L126 176 Q100 188 74 176Z" fill="${K}"/><path d="M70 156 L76 168 L82 158 L88 170 L94 160 L100 172 L106 160 L112 170 L118 158 L124 168 L130 156Z" fill="#fff"/>`,
+  shout:()=>`<path d="M72 152 Q100 158 128 152 L122 178 Q100 186 78 178Z" fill="${K}"/><path d="M76 154 Q100 159 124 154 L123 160 Q100 164 77 160Z" fill="#fff"/>`,
+  cat:()=>T('M86 156 Q93 164 100 156 Q107 164 114 156',3),
+  tiny:()=>T('M92 160 Q98 156 108 162',3),
+  catWin:()=>`<path d="M84 153 Q92 161 100 153 Q108 161 116 153 L112 172 Q100 182 88 172Z" fill="#6a1220" ${LN(3)}/><path d="M87 156 L90 166 L94 158Z M113 156 L110 166 L106 158Z" fill="#fff"/><ellipse cx="100" cy="173" rx="7" ry="3.5" fill="#e8707a"/>`,
+  catLose:()=>T('M86 166 Q93 157 100 166 Q107 157 114 166',3.2),
+  pout:l=>`<path d="M86 156 Q93 150 100 153 Q107 150 114 156 Q100 160 86 156Z" fill="${l}" ${LN(1.8)}/><path d="M88 158 Q100 169 112 158 Q100 161 88 158Z" fill="${l}" ${LN(1.8)}/>`,
+  smileF:l=>`<path d="M84 152 Q100 174 116 152 Q100 158 84 152Z" fill="${l}" ${LN(1.8)}/><path d="M89 157 Q100 168 111 157" fill="none" stroke="#fff" stroke-width="2.4"/>`,
+  frownF:l=>`<path d="M86 163 Q100 151 114 163 Q100 157 86 163Z" fill="${l}" ${LN(1.8)}/>`,
+  openF:()=>`<path d="M82 150 Q100 156 118 150 Q112 176 100 176 Q88 176 82 150Z" fill="#6a1220" ${LN(3)}/><path d="M86 152 Q100 156 114 152 L112 158 Q100 162 88 158Z" fill="#fff"/><ellipse cx="100" cy="168" rx="7" ry="4" fill="#e8707a"/>`
+};
+// ---- 小物 ----
+const ACC={
+  scar:()=>`<path d="M120 80 L136 128" stroke="${K}" stroke-width="3.4"/><path d="M125 92 L134 88 M128 104 L137 100 M131 116 L139 112" stroke="${K}" stroke-width="2.4"/>`,
+  beard:c=>P('M54 120 Q54 168 100 188 Q146 168 146 120 Q136 150 100 150 Q64 150 54 120Z',c,2.6),
+  goatee:c=>P('M88 164 Q100 196 112 164 Q100 170 88 164Z',c,2.4),
+  stache:c=>P('M78 150 Q90 142 100 148 Q110 142 122 150 Q110 156 100 154 Q90 156 78 150Z',c,2.4),
+  glasses:()=>`<g fill="none" ${LN(2.6)}><rect x="60" y="98" width="38" height="26" rx="6"/><rect x="102" y="98" width="38" height="26" rx="6"/><path d="M98 108 L102 108"/></g>`,
+  monocle:()=>`<circle cx="121" cy="110" r="14" fill="#fff" fill-opacity=".25" ${LN(2.6)}/><path d="M133 120 L146 150" fill="none" ${LN(1.6)}/>`,
+  mask:c=>`<path d="M54 100 Q100 90 146 100 L146 122 Q122 114 100 122 Q78 114 54 122Z" fill="${c}" ${LN(3)}/><path d="M64 110 L90 112 M110 112 L136 110" ${LN(4)} fill="none"/><path d="M68 110 L88 112 M112 112 L132 110" stroke="#fff" stroke-width="1.6" fill="none"/>`,
+  domino:()=>`<path d="M56 100 Q100 92 144 100 L142 122 Q120 118 100 124 Q80 118 58 122Z" fill="${K}"/><path d="M66 110 L90 110 M110 110 L134 110" stroke="#fff" stroke-width="2.4" fill="none"/>`,
+  tears:()=>`<path d="M70 124 Q66 136 70 146 Q74 138 70 124Z M130 124 Q126 136 130 146 Q134 138 130 124Z M62 128 Q58 140 62 150 Q66 140 62 128Z M138 128 Q134 140 138 150 Q142 140 138 128Z" fill="#9fd8ff" ${LN(1.6)}/>`,
+  third:()=>`<ellipse cx="100" cy="76" rx="9" ry="6" fill="#fff" ${LN(2.4)}/><circle cx="100" cy="76" r="2.6" fill="${K}"/>`,
+  cheeks:()=>`<ellipse cx="66" cy="140" rx="13" ry="9" fill="#e87a7a" opacity=".55"/><ellipse cx="134" cy="140" rx="13" ry="9" fill="#e87a7a" opacity=".55"/>`,
+  gloom:()=>T('M66 52 L66 76 M78 46 L78 72 M90 42 L90 68 M110 42 L110 68 M122 46 L122 72 M134 52 L134 76',1.6),
+  shine:()=>`<path d="M160 36 L163 48 L175 52 L163 56 L160 68 L157 56 L145 52 L157 48Z" fill="#fff" ${LN(1.6)}/>`,
+  mole:()=>`<circle cx="124" cy="152" r="2.2" fill="${K}"/>`,
+  sweat:()=>`<path d="M146 70 Q140 84 146 90 Q152 84 146 70Z M158 100 Q153 110 158 116 Q163 110 158 100Z" fill="#cfeaff" ${LN(1.8)}/>`,
+  zawa:()=>`<g fill="${K}" font-family="Yu Gothic,sans-serif" font-weight="bold" font-size="17"><text x="150" y="40">ゴロ</text><text x="158" y="58">…</text></g>`,
+  crown:()=>P('M64 52 L70 22 L86 40 L100 16 L114 40 L130 22 L136 52Z','#f0c840',2.8)+`<circle cx="70" cy="22" r="3.2" fill="#e04040"/><circle cx="100" cy="16" r="3.2" fill="#e04040"/><circle cx="130" cy="22" r="3.2" fill="#e04040"/>`,
+  headband:()=>P('M52 74 Q100 58 148 74 L148 84 Q100 70 52 84Z','#2a6a5a',2.4)+`<path d="M100 70 L94 80 L100 90 L106 80Z" fill="#f0c840" ${LN(1.6)}/>`,
+  ribbon:()=>`<g fill="#e8507a" ${LN(2.6)}><path d="M140 46 L164 32 L162 64Z"/><path d="M140 46 L116 32 L118 64Z"/><circle cx="140" cy="47" r="6"/></g>`,
+  band:c=>P('M50 78 Q100 62 150 78 L150 90 Q100 74 50 90Z',c||'#f2f2f2',2.4)+P('M148 82 L170 92 L160 98 L172 108 L150 92Z',c||'#f2f2f2',2),
+  veil:c=>P('M84 168 L80 208 L120 208 L116 168Z',c,3)+T('M88 186 Q100 192 112 186 M88 198 Q100 204 112 198',1.4).replace(K,'#2a0a3a')+P('M58 122 Q100 112 142 122 L140 152 Q132 174 100 184 Q68 174 60 152Z',c,3)+T('M82 128 Q100 138 118 128 M70 150 Q100 166 130 150',1.4).replace(K,'#2a0a3a')+T('M100 122 L100 140',1.4).replace(K,'#2a0a3a'),
+  hairband:()=>P('M54 72 Q100 54 146 72 L146 80 Q100 64 54 80Z','#e8f0ff',2.2),
+  earring:()=>`<circle cx="52" cy="124" r="3" fill="#f0c840" ${LN(1.4)}/><circle cx="148" cy="124" r="3" fill="#f0c840" ${LN(1.4)}/>`,
+  ports:()=>`<rect x="82" y="182" width="5" height="12" fill="#9aa4b6" stroke="${K}" stroke-width="2"/><rect x="113" y="182" width="5" height="12" fill="#9aa4b6" stroke="${K}" stroke-width="2"/>`,
+  chain:()=>`<path d="M62 92 Q58 120 66 140" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="4 3"/>`
+};
+const BEHIND={
+  wings:()=>`<path d="M54 150 L8 120 L14 56 L42 30 L60 70 L66 120Z M146 150 L192 120 L186 56 L158 30 L140 70 L134 120Z" fill="#dcefff" ${LN(3)} opacity=".9"/><path d="M54 140 L22 100 M56 128 L30 70 M146 140 L178 100 M144 128 L170 70" fill="none" ${LN(1.2)}/>`,
+  halo:()=>`<circle cx="100" cy="90" r="88" fill="#f6e090" ${LN(3)} opacity=".95"/><circle cx="100" cy="90" r="76" fill="#fff4c0" opacity=".7"/>`+Array.from({length:16},(_,i)=>{const a=i*Math.PI/8;return `<path d="M${100+Math.cos(a)*88} ${90+Math.sin(a)*88} L${100+Math.cos(a)*106} ${90+Math.sin(a)*106}" ${LN(3)}/>`}).join('')
+};
+// ---- 猫 ----（d.cat を付けると、耳・猫の鼻・ひげ・縦長の瞳になる。d.skin は毛の色）
+const catEars=(fur,inner)=>P('M52 86 L42 12 L98 46Z',fur,3.5)+P('M148 86 L158 12 L102 46Z',fur,3.5)+`<path d="M58 72 L51 30 L86 49Z M142 72 L149 30 L114 49Z" fill="${inner}"/>`+T('M60 62 L55 40 M140 62 L145 40',1.2);
+const catNose=()=>`<ellipse cx="100" cy="147" rx="30" ry="20" fill="#fff" opacity=".4"/><path d="M91 121 L109 121 L100 134Z" fill="#b84a52" ${LN(2.2)}/>`+T('M100 134 L100 156',2.2);
+const catWhisk=()=>T('M64 140 L14 124 M64 148 L10 148 M66 157 L16 174 M136 140 L186 124 M136 148 L190 148 M134 157 L184 174',1.7);
+const FUR={
+  tabby:()=>T('M100 40 L100 64 M85 42 L88 60 M115 42 L112 60 M54 112 L72 118 M52 124 L70 128 M146 112 L128 118 M148 124 L130 128',2.4).replace(/stroke="#111"/g,'stroke="#3a2a1a"').replace(/stroke-width="2.4"/g,'stroke-width="3"'),
+  patch:()=>'<ellipse cx="122" cy="110" rx="23" ry="21" fill="#2a2420" opacity=".62"/>',
+  none:()=>''
+};
+function faceSVG(d){
+  const f=d.sex=='f',skin=d.skin||(f?'#f6e2d0':'#e8caa0'),hairC=d.hair?d.hair[1]:'#222';
+  const H=(HAIR[d.hair?d.hair[0]:'bald'])(hairC);
+  let eye=d.eye[0]=='f'?EYE[d.eye[0]](d.eye[1]):EYE[d.eye[0]]();
+  if(d.cat)eye=eye.replace(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)" fill="#111"\/>/g,(m,x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="${(r*.42).toFixed(1)}" ry="${(r*1.5).toFixed(1)}" fill="#111"/>`);
+  const bw=d.brow[1],lipC=d.lip||'#c0504e';
+  const eyeG=`<g>${eye}</g><g>${d.brow[0]=='none'?'':T(BROWS[d.brow[0]],bw)}</g>`;
+  const hatch=d.hatch=='cheek'?T('M58 124 L68 134 M56 134 L66 144 M60 144 L68 152 M142 124 L132 134 M144 134 L134 144 M140 144 L132 152',1.8)+T('M64 124 Q78 134 92 124 M108 124 Q122 134 136 124',1.5)
+    :d.hatch=='age'?T('M86 126 Q82 140 86 152 M114 126 Q118 140 114 152',1.3):d.hatch=='soft'?T('M62 136 L70 146 M138 136 L130 146',1.6):'';
+  const FRONTA=['crown','ribbon','headband','hairband','band','gloom','shine'],mkAcc=front=>(d.acc||[]).map(a=>{const n=typeof a=='string'?a:a[0];return ACC[n]&&(FRONTA.includes(n)==front)?ACC[n](typeof a=='string'?undefined:a[1]):''}).join(''),accs=mkAcc(false);
+  const sk=d.cloth;
+  const body=BODY[sk[0]](sk[1],sk[2]||skin);
+  return `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">`+
+   (d.behind?BEHIND[d.behind]():'')+H.b+
+   P('M86 166 L86 200 L114 200 L114 166Z',skin,3)+(d.sex=='m'?T('M90 176 L110 184 M90 184 L110 192',1.8):'')+
+   body+(d.neckAcc?ACC[d.neckAcc]():'')+
+   (d.cat?catEars(skin,d.inner||'#e8a0a0'):`<path d="M48 98 L40 108 L44 126 L54 124Z M152 98 L160 108 L156 126 L146 124Z" fill="${skin}" ${LN(3)}/>`)+
+   `<path d="${HEAD[d.head]}" fill="${skin}" ${LN(3.5)}/>`+
+   hatch+(d.cat?(FUR[d.fur||'none'])():'')+
+   `<g>${eyeG}</g><g transform="translate(200 0) scale(-1 1)">${eyeG}</g>`+
+   (d.cat?catNose():NOSE[d.nose])+
+   (d.mouth=='pout'?MOUTH.pout(lipC):(d.mouth=='smileF'||d.mouth=='frownF')?MOUTH[d.mouth](lipC):MOUTH[d.mouth]())+
+   (d.cat?catWhisk():'')+accs+H.f+mkAcc(true)+
+   `</svg>`;
+}
+// ---- 24人 ----
+const D={
+ baka1:{sex:'m',head:'sharp',eye:['bug'],brow:['angry',7],nose:'long',mouth:'grin',hatch:'cheek',hair:['mohawk','#f0c830'],acc:['scar'],cloth:['jacket','#222']},
+ baka2:{sex:'f',head:'fem2',eye:['fBig','#4a98d0'],brow:['arch',3],nose:'short',mouth:'openF',hatch:'soft',hair:['long','#8ad0f0'],acc:['ribbon'],behind:'wings',cloth:['dress','#74b894']},
+ weak1:{sex:'m',head:'sharp',eye:['lazy'],brow:['rise',5],nose:'hook',mouth:'smirk',hatch:'cheek',hair:['shoulder','#eeeeee'],acc:[['band','#c02a2a']],cloth:['suit','#5a3a6a','#fff']},
+ weak2:{sex:'f',head:'fem',eye:['crazy'],brow:['rise',3],nose:'short',mouth:'tiny',hatch:'soft',hair:['mess','#5a3a2a'],cloth:['dress','#8a8aa0']},
+ weak3:{sex:'m',head:'long',eye:['slit'],brow:['worry',5],nose:'long',mouth:'frown',hatch:'cheek',hair:['allback','#cfcfcf'],acc:[['stache','#cfcfcf']],cloth:['kimono','#2c5a6a']},
+ weak4:{sex:'f',head:'fem2',eye:['fBig','#6a4a2a'],brow:['angry',4],nose:'short',mouth:'shout',hatch:'soft',hair:['twin','#2a1a1a'],acc:['tears'],cloth:['dress','#c04a4a']},
+ weak5:{sex:'f',head:'fem2',eye:['fLazy','#d88a2a'],brow:['flat',3],nose:'fine',mouth:'tiny',hair:['bob','#e8872a'],cloth:['dress','#e8d8b8']},
+ normal1:{sex:'m',head:'sharp',eye:['stern'],brow:['angry',5],nose:'long',mouth:'flat',hatch:'cheek',hair:['curly','#6a4020'],cloth:['suit','#d8d8e0','#c02a2a']},
+ normal2:{sex:'f',head:'fem',eye:['fCalm','#2a5a8a'],brow:['arch',3],nose:'fine',mouth:'pout',lip:'#c07070',hair:['bobPlain','#2a3a8a'],cloth:['dress','#8ab8d8']},
+ normal3:{sex:'m',head:'square',eye:['stern'],brow:['angry',7],nose:'long',mouth:'frown',hatch:'cheek',hair:['cap','#1a1a2a'],acc:['chain'],cloth:['coat','#1a1a2a']},
+ normal4:{sex:'f',head:'fem',eye:['fCalm','#2a1a1a'],brow:['angry',3.6],nose:'fine',mouth:'pout',lip:'#c0202a',hair:['long','#f0d060'],acc:['domino','earring'],cloth:['dress','#6a2a8a']},
+ normal5:{sex:'m',head:'round',eye:['dot'],brow:['flat',4],nose:'short',mouth:'flat',hair:['short','#2a2220'],cloth:['gi','#3a8a6a','#c8a030']},
+ normal6:{sex:'f',head:'fem',eye:['fCalm','#c02a3a'],brow:['flat',2.6],nose:'fine',mouth:'flat',hair:['bobPlain','#8ab0d8'],cloth:['suit','#e8e8f0','#f2f2f2']},
+ normal7:{sex:'f',head:'fem',eye:['fCalm','#6a2a8a'],brow:['arch',3],nose:'fine',mouth:'pout',lip:'#7a1a4a',hatch:'age',hair:['updo','#7a4a2a'],acc:['earring',['veil','#7a3a9a']],cloth:['coat','#4a2a6a']},
+ normal8:{sex:'m',head:'sharp',eye:['slit'],brow:['flat',4],nose:'short',mouth:'smirk',hair:['slick','#e8c040'],cloth:['suit','#c02a2a','#fff']},
+ strong1:{sex:'m',head:'sharp',eye:['slitY'],brow:['flat',3.6],nose:'fine',mouth:'flat',skin:'#f0d6b8',hair:['long','#111'],cloth:['kimono','#2a3a5a']},
+ strong2:{sex:'f',head:'fem',eye:['fCalm','#4a8ac0'],brow:['arch',2.6],nose:'fine',mouth:'pout',lip:'#c05a5a',hair:['long','#f0d070'],acc:['hairband'],cloth:['dress','#f0f0f8']},
+ strong3:{sex:'m',head:'square',eye:['stern'],brow:['angry',8],nose:'long',mouth:'frown',hatch:'cheek',hair:['spiky','#111'],cloth:['bare','#222','#e8caa0']},
+ strong4:{sex:'m',head:'sharp',eye:['stern'],brow:['angry',7],nose:'long',mouth:'frown',hatch:'cheek',hair:['sweep','#f0d060'],acc:['headband'],cloth:['coat','#2a6a5a']},
+ strong5:{sex:'f',head:'fem',eye:['fLazy','#2a1a1a'],brow:['arch',3],nose:'fine',mouth:'pout',lip:'#c0202a',hair:['wavy','#4a2a1a'],acc:['mole'],cloth:['dress','#c02a4a']},
+ max1:{sex:'f',head:'fem2',eye:['fCalm','#d8a02a'],brow:['arch',2.6],nose:'fine',mouth:'pout',lip:'#d0504a',hair:['hime','#111'],behind:'halo',cloth:['robe','#f0e8d0','#d8a020']},
+ max2:{sex:'f',head:'fem',eye:['fCalm','#d84a58'],brow:['flat',2.6],nose:'fine',mouth:'pout',lip:'#a6564f',hair:['semi','#2a3f7a'],neckAcc:'ports',cloth:['suit','#232c3c','#f4f4f4']},
+ max3:{sex:'m',head:'long',eye:['slitY'],brow:['flat',3.4],nose:'fine',mouth:'smirk',skin:'#f2dcc0',hair:['raggedShort','#f2f2f2'],acc:['zawa'],cloth:['suit','#1a1a1a','#eee']},
+ max4:{sex:'m',head:'chubby',eye:['dot'],brow:['flat',2.6],nose:'short',mouth:'cat',hair:['bowl','#e8c860'],acc:['cheeks','crown'],cloth:['cape','#c8962a']}
+};
+// 表情: normal / win(勝ち) / lose(負け) / zawa(ざわ…)
+function withExpr(d,e){
+  if(!e||e=='normal')return d;const o=Object.assign({},d),f=d.sex=='f',acc=(d.acc||[]).slice(),has=n=>acc.some(a=>(typeof a=='string'?a:a[0])==n),add=n=>{if(!has(n))acc.push(n)};
+  const w=d.brow[1],keep=['grin','openF','cat','smile','shout'];
+  if(e=='win'){if(!keep.includes(d.mouth)||(d.cat&&d.mouth=='cat'))o.mouth=d.cat?'catWin':f?'smileF':'smirk';if(d.brow[0]!='angry'&&d.brow[0]!='none')o.brow=['rise',w];add('shine')}
+  else if(e=='lose'){o.mouth=d.cat?'catLose':f?'frownF':'frown';if(d.brow[0]!='none')o.brow=['worry',w];add('sweat');add('gloom')}
+  else if(e=='zawa'){o.mouth='tiny';if(d.brow[0]!='none')o.brow=['worry',w];add('sweat')}
+  o.acc=acc;return o}
+g.faceSVGd=(d,e)=>faceSVG(withExpr(d,e));
+g.FACES=D;g.faceSVG=(id,e)=>D[id]?faceSVG(withExpr(D[id],e)):'';
+})(typeof window!='undefined'?window:globalThis);
+
+/*FACES_END*/
+const LVD={baka:"縛り未満で作牌して和了しチョンボ。見えている当たり牌にも振り込む",weak:"ときどき適当に切る。あなたの透明牌から待ちを読まない",normal:"あなたの透明牌から待ちを読んで避ける",strong:"縛りを満たす手だけに絞って待ちを読む。出やすい牌を待ちにして作牌",max:"残り枚数から各牌が当たる確率を計算して一番安全な牌を切る。あなたの切り方の癖も覚える"};
+const LVN={baka:'Casual',weak:'Easy',normal:'Normal',strong:'Hard',max:'Ultimate'};
+// concept=役割の仮の説明（名前・絵が決まるまでの目印）。risk=攻め気、cheat=イカサマ好き（イカサマONのときだけ使う）、bluff=賭け・ざわの出し方
+const CHARS=(()=>{const R=[["baka","ニャッハー","おバカ","考えるより先に切る",0.9,0.1,0.9,"m"],["baka","ゲニャラ","おバカ","無計画で振り込みやすい",0.5,0.1,0.5,"f"],["weak","ニャーゲル","おバカ","判断が遅く、危険牌を切る",0.15,0.1,0.1,"m"],["weak","ニャンジェルミ","おバカ","独特の感覚で打つ",0.5,0.1,0.5,"f"],["weak","ニャンメイ","慎重","慎重に状況を見極める",0.15,0.1,0.25,"m"],["weak","ニャベルタ","豪快","感情的に押しまくる",0.9,0.1,0.75,"f"],["weak","ニャウ","異端","面倒くさがりで気まぐれ","moody",0.1,0.5,"f"],["normal","ニャムロ","真面目","状況分析と合理的判断",0.5,0.1,0.5,"m"],["normal","ニャツヤ","真面目","確率と安全性を重視",0.5,0.1,0.25,"f"],["normal","ニャータロウ","豪快","強気で大物手を狙う",0.9,0.1,0.75,"m"],["normal","ニャルセポネ","豪快","プライドが高く勝負好き",0.9,0.1,0.75,"f"],["normal","ニャパン","慎重","無理をせず守備重視",0.15,0.1,0.25,"m"],["normal","ニャタ・ニャリ","慎重","感情を出さず安全重視",0.15,0.1,0.6,"f"],["normal","ニャートリ","策士","相手の癖を観察する",0.5,0.1,0.6,"f"],["normal","シャーッ","異端","気分次第で打ち筋が変わる","moody",0.1,0.5,"m"],["strong","ニャエ門","真面目","冷静で無駄な勝負をしない",0.5,0.1,0.6,"m"],["strong","アメノウズニャ","慎重","丁寧で堅実な打ち方",0.15,0.1,0.25,"f"],["strong","ニャンシロウ","豪快","勝負どころで強く押す",0.9,0.1,0.9,"m"],["strong","ニャオ","策士","ブラフと威圧",0.9,0.1,0.75,"m"],["strong","ヴォワニャン","策士","相手を油断させる（イカサマ好き）",0.5,0.9,0.6,"f"],["max","ニャリエル","異端","感情で攻守が変化","moody",0.1,0.9,"f"],["max","クサニャギ","真面目","情報分析と合理性",0.5,0.1,0.6,"f"],["max","ニャルコムX","策士","相手の心理を読む",0.5,0.1,0.6,"m"],["max","ニャーゴ","異端","大勝負と大金にこだわる",0.9,0.1,0.9,"m"]];
+  const cnt={};return R.map(([lv,name,type,concept,risk,cheat,bluff,sex])=>{cnt[lv]=(cnt[lv]||0)+1;const moody=risk=='moody';return{id:lv+cnt[lv],lv,name,type,concept:type+'：'+concept,sex,moody,style:{risk:moody?.5:risk,cheat,bluff}}})})();
+const EPI={baka1:'元気な野良猫',baka2:'不倒不屈の革命家',weak1:'尊大な自称天才',weak2:'錬金伯爵',weak3:'卓上の軍師',weak4:'戦うメイド',weak5:'求道の格闘家',normal1:'銀河の白き魔獣',normal2:'流浪の雀士',normal3:'クールな白金番長',normal4:'冥府の使者',normal5:'神算鬼謀の怪盗',normal6:'沈黙の諜報員',normal7:'謀略の紫女王',normal8:'孤高の紅き幻獣',strong1:'斬鉄の剣豪',strong2:'岩戸を開く舞姫',strong3:'無敵の救世主',strong4:'超越する者',strong5:'黄昏の魔女',max1:'大天使',max2:'ネットの用心棒',max3:'憤怒の抗議者',max4:'現場の預言者'};
+const charOf=id=>CHARS.find(c=>c.id==id);
+const charName=c=>c.name||'？？？（'+LVN[c.lv]+(CHARS.filter(x=>x.lv==c.lv).indexOf(c)+1)+'）';
+const cstyle=()=>{const c=charOf(SET.char);return c?(c.moody?{...c.style,risk:c.mood??.5}:c.style):{risk:.5,cheat:.1,bluff:.5}}; // 異端は局ごとに攻め気が変わる
+// 攻め気が高いほど大きい手（高い倍率）を優先して作り、低いほど待ちの広さを優先する（標準=1）
+const buildVW=()=>Math.pow(2.5,(cstyle().risk-.5)*2.5);
+let SAYT=0;
+function sayChar(scene,ms){const cc=charOf(SET.char);if(!cc)return;const t=((typeof LINES!='undefined'&&LINES[cc.id])||{})[scene];const el=$('cSay');if(!t||!el)return;el.textContent=t;el.style.display='block';clearTimeout(SAYT);SAYT=setTimeout(()=>{el.style.display='none'},ms||4500)} // 相手のセリフ（吹き出し）
+let EXPR='normal',EXPRT=0;
+// 猫の絵: キャラID→cat/ の画像番号。表情は絵を変えず、汗や線などの効果を重ねて出す
+const CATIMG={baka1:7,baka2:16,weak1:20,weak2:5,weak3:8,weak4:11,weak5:6,normal1:22,normal2:1,normal3:14,normal4:18,normal5:12,normal6:21,normal7:9,normal8:19,strong1:10,strong2:3,strong3:17,strong4:24,strong5:15,max1:23,max2:4,max3:13,max4:2};
+const catSrc=id=>CATIMG[id]?'cat/c'+String(CATIMG[id]).padStart(2,'0')+'.png':'';
+const catFx=e=>{
+  const sweat='<path d="M82 14 Q75 28 82 34 Q89 28 82 14Z" fill="#cfeaff" stroke="#1c1816" stroke-width="1.6"/>';
+  if(e=='win')return '<svg viewBox="0 0 100 100"><path d="M84 6 L87 17 L98 20 L87 23 L84 34 L81 23 L70 20 L81 17Z" fill="#fff6c0" stroke="#1c1816" stroke-width="1.4"/><path d="M12 14 L15 22 L23 25 L15 28 L12 36 L9 28 L1 25 L9 22Z" fill="#fff6c0" stroke="#1c1816" stroke-width="1.2"/></svg>';
+  if(e=='lose')return '<svg viewBox="0 0 100 100">'+sweat+'<g stroke="#1c1816" stroke-width="1.8" stroke-linecap="round" fill="none"><path d="M26 8 L26 28 M38 4 L38 26 M50 2 L50 24 M62 4 L62 26 M74 8 L74 28"/></g></svg>';
+  if(e=='zawa')return '<svg viewBox="0 0 100 100">'+sweat+'<text x="2" y="22" font-size="15" font-weight="bold" fill="#fff" stroke="#1c1816" stroke-width="3" paint-order="stroke" font-family="Yu Gothic,sans-serif">ゴロゴロ…</text></svg>';
+  return '';
+};
+const thumb=id=>useCat(id)?'<img src="'+catSrc(id)+'" alt="">':faceSVG(id);
+const useCat=id=>SET.pics!='human'&&!!catSrc(id);
+// 相手の顔（猫の絵があればそれ、なければ劇画調のSVG）
+function portrait(id,e){
+  if(!useCat(id))return faceSVG(id,e);
+  return '<div class="catw cat-'+(e||'normal')+'"><img src="'+catSrc(id)+'" alt=""><div class="fx">'+catFx(e)+'</div></div>';
+}
+function setExpr(e,ms){EXPR=e;clearTimeout(EXPRT);if(ms)EXPRT=setTimeout(()=>{if(EXPR==e)setExpr('normal')},ms);try{syncOpp()}catch(x){}} // 相手の表情（normal/win/lose/zawa）
+function syncOpp(){{const e=$("cEpi");if(e){const c=charOf(SET.char);e.textContent=c&&EPI[c.id]?EPI[c.id]:""}}document.querySelectorAll('.opn').forEach(e=>e.textContent=oppName());const fc=$('cFace'),cc=charOf(SET.char),ok=!!cc,key=ok?cc.id+'|'+EXPR+'|'+SET.pics:'';if(fc.dataset.id!=key){fc.dataset.id=key;fc.innerHTML=ok?portrait(cc.id,EXPR):'';const ct=ok&&useCat(cc.id);fc.classList.toggle('cat',ct);if(fc.parentElement)fc.parentElement.classList.toggle('catbox',ct)}}
+function oppName(){const c=charOf(SET.char);return c?(c.name||'老人'):'老人'}
+function fmt(n){const u=typeof SET!='undefined'?SET.unit:'';return u=='chip'?Math.round(n/10)+'枚':u=='kibble'?n+'g':n+'cc'}
+function unitW(){return SET.unit=='chip'?'チップ':SET.unit=='kibble'?'カリカリ':'血液'}
+const SET={preset:"orig",...ORIG,clear:75,perKind:3,time:180,bind:5,match:"blood",char:"normal1",blood:1000,unit:"kibble",rounds:5,verify:true,vmode:"detail",ronhl:false,sfx:true,vol:70,red:false,pics:'cat',zawa:true,opp:"normal",guard:"on",cheat:false,swapMax:3,caught:20,peekMax:3,view:"angle",sway:false,ctl:"cad",riichi:true,score:"mult",v:0};
+try{Object.assign(SET,JSON.parse(localStorage.getItem("w17set")||"{}"))}catch(e){}
+const normSet=()=>{SET.pics="cat";if(SET.unit=="blood")SET.unit="kibble"};normSet();
+if(SET["pe"+"ek"]){SET.cheat=true}delete SET["pe"+"ek"]; // 旧: 透視の設定はイカサマに統合
+if(SET.v!==5){if(SET.v<3){Object.assign(SET,ORIG);SET.preset="orig"}if(SET.score=='mjoya'){SET.score='mj';SET.offPts='oya'}SET.v=5} // 旧設定からの移行: 原作準拠にそろえる
+[[30,"30秒"],[60,"1分"],[120,"2分"],[180,"3分"],[300,"5分"],[600,"10分"],[0,"無制限"]].forEach(([v,l])=>$("sTime").add(new Option(l,v)));
+BINDS.forEach(([v,l])=>$("sBind").add(new Option(l,v)));
+[500,1000,1500,2000].forEach(v=>$("sBlood").add(new Option(v+"cc",v)));
+[1,3,5,8,10,15,20].forEach(v=>$("sRounds").add(new Option(v+"局",v)));
+[0,1,2,3,4].forEach(v=>$("sKind").add(new Option(v+"枚（黒牌"+(4-v)+"枚）",v)));
+const radios=()=>document.querySelectorAll("input[name=sPreset]");
+const syncSet=()=>{
+  radios().forEach(r=>r.checked=(r.value==SET.preset));
+  const lock=SET.preset=="orig";
+  document.querySelectorAll("#ruleFields select,#ruleFields input").forEach(e=>e.disabled=lock);
+  $("sFieldRule").value=SET.fieldRule?"1":"0";$("sField").value=SET.field;$("sFieldW").style.display=SET.fieldRule?"":"none";
+  $("sWF").value=SET.wFirst;$("sWS").value=SET.wSecond;$("sWF").disabled=$("sWS").disabled=lock||SET.oyako;
+  $("sOyako").value=SET.oyako?"1":"0";$("sOffPts").value=SET.offPts;$("sOffW").style.display=SET.oyako?"none":"";$("sRenchan").value=SET.renchan?"1":"0";
+  $("sFirstBy").value=SET.firstBy;$("sDoraBy").value=SET.doraBy;$("sMode").value=SET.mode;$("sClr").value=SET.clear;$("sClrV").textContent=SET.clear+"%";$("sKind").value=SET.perKind;
+  $("sTime").value=SET.time;$("sBind").value=SET.bind;$("sMatch").value=SET.match;$("sUnit").value=SET.unit;$("sBlood").value=SET.blood;[...$("sBlood").options].forEach(o=>o.text=o.value+(SET.unit=="kibble"?"g":"cc"));$("sBloodN").textContent=SET.unit=="chip"?"＝"+SET.blood/10+"枚":SET.unit=="kibble"?"＝"+SET.blood/1000+"kg":(SET.blood>=2000?"＝2L（原作の上限）":"＝"+SET.blood/1000+"L");$("sRounds").value=SET.rounds;
+  $("mRand").style.display=SET.mode=="random"?"":"none";$("mKind").style.display=SET.mode=="perkind"?"":"none";
+  $("sRoundsW").style.display=SET.match=="rounds"?"":"none";
+  $("sVerify").value=SET.verify?"1":"0";$("sVMode").value=SET.vmode;$("sVMode").style.display=SET.verify?"":"none";
+  $("sRonHl").value=SET.ronhl?"1":"0";{const cc=charOf(SET.char);$("cpkNow").textContent=cc?charName(cc):"";}$("sZawa").value=SET.zawa===false?"0":"1";$("sSfx").value=SET.sfx===false?"0":"1";$("sVol").value=SET.vol;$("sVolV").textContent=SET.vol+"%";$("sVolW").style.display=SET.sfx===false?"none":"";$("sGuard").value=SET.guard;$("sGuard").disabled=SET.cheat;$("sCheat").value=SET.cheat?"1":"0";$("sPeekMax").value=SET.peekMax;$("sSwapMax").value=SET.swapMax;$("sCaught").value=SET.caught;$("cheatW").style.display=SET.cheat?"":"none";$("sView").value=SET.view;$("sSway").value=SET.sway?"1":"0";$("sCtl").value=SET.ctl;$("sRii").value=SET.riichi?"1":"0";$("sRed").value=SET.red?"1":"0";$("sScore").value=SET.score;
+};
+const saveSet=()=>{
+  const pr=[...radios()].find(r=>r.checked);SET.preset=pr?pr.value:"orig";
+  if(SET.preset=="orig")Object.assign(SET,ORIG);
+  else{
+    SET.fieldRule=$("sFieldRule").value=="1";SET.field=+$("sField").value;SET.wFirst=+$("sWF").value;SET.wSecond=+$("sWS").value;
+    SET.oyako=$("sOyako").value=="1";SET.offPts=$("sOffPts").value;SET.renchan=$("sRenchan").value=="1";SET.mode=$("sMode").value;SET.firstBy=$("sFirstBy").value;SET.doraBy=$("sDoraBy").value;
+  }
+  SET.clear=+$("sClr").value;SET.perKind=+$("sKind").value;
+  SET.time=+$("sTime").value;SET.bind=+$("sBind").value;SET.match=$("sMatch").value;SET.unit=$("sUnit").value;SET.blood=Math.min(2000,+$("sBlood").value||1000);SET.rounds=+$("sRounds").value;
+  SET.verify=$("sVerify").value=="1";SET.vmode=$("sVMode").value;SET.ronhl=$("sRonHl").value=="1";SET.zawa=$("sZawa").value=="1";SET.sfx=$("sSfx").value=="1";SET.vol=+$("sVol").value;SET.guard=$("sGuard").value;SET.cheat=$("sCheat").value=="1";SET.peekMax=+$("sPeekMax").value;SET.swapMax=+$("sSwapMax").value;SET.caught=+$("sCaught").value;SET.view=$("sView").value;SET.sway=$("sSway").value=="1";SET.ctl=$("sCtl").value;SET.riichi=$("sRii").value=="1";SET.red=$("sRed").value=="1";SET.score=$("sScore").value;
+  syncSet();try{localStorage.setItem("w17set",JSON.stringify(SET))}catch(e){}
+  if(typeof G!="undefined"&&G&&G.roundNo)render();
+};
+{let cpkLv='normal',cpkPage=0,cpkCb=null;const PER=6;
+  const cpkDraw=()=>{
+    $("cpkDiff").style.display=cpkCb?"":"none";
+    if(cpkCb){$("cpkLvs").innerHTML="";Object.keys(LVN).forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=LVN[k];b.className=k==SET.opp?"on":"";b.onclick=()=>{SET.opp=k;try{localStorage.setItem("w17set",JSON.stringify(SET))}catch(e){}cpkDraw()};$("cpkLvs").appendChild(b)});$("cpkLvD").textContent=LVD[SET.opp]||""}
+    $("cpkTabs").innerHTML="";{const b=document.createElement("button");b.type="button";b.textContent="おまかせ（ランダム）";b.onclick=()=>{const c=CHARS[Math.random()*CHARS.length|0];SET.char=c.id;try{localStorage.setItem("w17set",JSON.stringify(SET))}catch(e){}syncSet();cpkPage=Math.floor(CHARS.indexOf(c)/PER);if(cpkCb)cpkDraw();else $("cpk").style.display="none"};$("cpkTabs").appendChild(b)}
+    const list=CHARS,pages=Math.max(1,Math.ceil(list.length/PER));cpkPage=Math.min(cpkPage,pages-1);
+    $("cpkGrid").innerHTML="";list.slice(cpkPage*PER,cpkPage*PER+PER).forEach(c=>{const d=document.createElement("div");d.className="card"+(c.name?"":" empty")+(c.id==SET.char?" sel":"");
+      d.innerHTML='<div class="face">'+(thumb(c.id)||(c.name?c.name[0]:"？"))+'</div><div class="nm"></div><div class="meta"></div>';d.querySelector(".nm").textContent=charName(c);d.querySelector(".meta").textContent=(c.sex=='f'?'♀ ':'♂ ')+(EPI[c.id]||c.concept);
+      d.onclick=()=>{SET.char=c.id;try{localStorage.setItem("w17set",JSON.stringify(SET))}catch(e){}syncSet();if(cpkCb)cpkDraw();else $("cpk").style.display="none"};$("cpkGrid").appendChild(d)});
+    $("cpkPg").textContent=(cpkPage+1)+" / "+pages;$("cpkPrev").disabled=cpkPage<=0;$("cpkNext").disabled=cpkPage>=pages-1};
+  const cpkOpen=cb=>{cpkCb=cb||null;$("cpkClose").textContent=cb?"対局開始":"閉じる";const cc=charOf(SET.char);cpkPage=cc?Math.floor(CHARS.indexOf(cc)/PER):0;cpkDraw();$("cpk").style.display="flex"};window.cpkOpen=cpkOpen;
+  $("bCpk").onclick=()=>cpkOpen();
+  $("cpkPrev").onclick=()=>{cpkPage--;cpkDraw()};$("cpkNext").onclick=()=>{cpkPage++;cpkDraw()};$("cpkClose").onclick=()=>{$("cpk").style.display="none";if(cpkCb){const f=cpkCb;cpkCb=null;f()}};}
+syncSet();BINDA=SET.bind;
+["sClr","sTime","sBind","sMode","sKind","sMatch","sUnit","sBlood","sRounds","sVerify","sVMode","sRonHl","sZawa","sSfx","sVol","sGuard","sCheat","sPeekMax","sSwapMax","sCaught","sView","sSway","sCtl","sRii","sScore","sFieldRule","sField","sWF","sWS","sOyako","sOffPts","sRenchan","sFirstBy","sDoraBy"].forEach(id=>$(id).oninput=saveSet);
+radios().forEach(r=>r.onchange=saveSet);
+$("sVol").onchange=()=>sfx.tile();$("sSfx").onchange=()=>{saveSet();sfx.tile()};
+let MENU=false,STARTED=false;
+// 途中保存: 局の区切りで、持ち点・局数・相手などだけを残す（対局の途中で閉じたときは、その局の頭からやり直し）
+const SAVEK='w17save',SAVEG=['start','pb','cb','base','stake','roundNo','first','habit','pushLock'],SAVES=['char','opp','unit','blood','match','rounds'];
+function saveGame(){try{const g={},st={};SAVEG.forEach(k=>{if(G[k]!==undefined)g[k]=G[k]});SAVES.forEach(k=>st[k]=SET[k]);localStorage.setItem(SAVEK,JSON.stringify({g,st}))}catch(e){}}
+function clearSave(){try{localStorage.removeItem(SAVEK)}catch(e){}}
+function readSave(){try{const v=JSON.parse(localStorage.getItem(SAVEK)||'null');return v&&v.g&&v.st&&v.g.roundNo?v:null}catch(e){return null}}
+// 国士無双十三面待ちの絵（tiles/kokushi.png：上段が透明牌、下段が黒牌）。13枚それぞれ透明か黒かをランダムに
+function titleTiles(){const el=$("tTiles");if(!el)return;el.innerHTML="";for(let i=0;i<13;i++){const b=document.createElement("i");b.style.setProperty("--a",((i-6)*5.2)+"deg");const gl=Math.random()<.5;b.className=gl?"g":"b";b.style.backgroundPosition=(i*100/12)+"% "+(gl?0:100)+"%";el.appendChild(b)}}
+// 24匹を小さく並べる（tiles/cats.png：猫の画像番号1〜24を横に並べた1枚）。並び順は開くたびに入れ替わる
+function titleCats(){const el=$("tCats");if(!el)return;const a=[...Array(24).keys()];for(let i=23;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}el.innerHTML="";a.forEach(n=>{const b=document.createElement("i");b.style.backgroundPosition=(n*100/23)+"% 0";el.appendChild(b)})}
+// トゲトゲの吹き出し（叫び）。who: p=あなた（下）／c=相手（上）
+function shout(txt,who,ms){const d=document.createElement("div");d.className="shout "+who;const r=(a,b)=>a+Math.random()*(b-a),top=[],bot=[];
+  for(let x=3;x<=197;x+=7){top.push([x,14+r(-4,5)]);bot.push([x,86+r(-5,4)])}
+  const pts=top.concat([[200,34],[196,52],[200,70]],bot.reverse(),[[0,66],[4,48],[0,32]]).map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  d.innerHTML='<svg viewBox="0 0 200 100" preserveAspectRatio="none"><polygon points="'+pts+'"/></svg><span></span>';d.querySelector("span").textContent=txt;document.body.appendChild(d);setTimeout(()=>d.remove(),ms||1500)}
+// 倍プッシュを受けるか。難易度が高いほど慎重で、相手の持ち点が多いほど受けやすい
+function cpuAcceptPush(){const base={baka:1,weak:.9,normal:.75,strong:.6,max:.5}[SET.opp];const lead=(G.cb-G.pb)/Math.max(1,G.start);return Math.random()<Math.max(.1,Math.min(1,(base===undefined?.75:base)+lead*.4))}
+// 相手からの倍プッシュ。相手が負けているほど、攻めの猫ほど仕掛けやすい。仕掛けられたらあなたが受けるか断るかを選ぶ
+function cpuMaybePush(){
+  if(G.pushLock){newRound();return}
+  const risk=(cstyle()&&cstyle().risk)||.5,trail=G.cb<G.pb;
+  const pr=trail?.12+.3*risk:.03;
+  if(Math.random()>=pr){newRound();return}
+  shout("倍プッシュにゃっ！！","c",1600);setExpr("win",1600);
+  later(()=>{
+    $("paT").textContent=oppName()+"が倍プッシュを仕掛けてきた！";
+    $("paB").textContent="受けると、賭けカリカリが "+fmt(G.stake)+" から "+fmt(G.stake*2)+" になる。";
+    $("pushAsk").style.display="flex";
+    const ans=acc=>{$("pushAsk").style.display="none";shout(acc?"受けて立つにゃっ！！":"だが、断るにゃっ！","p",1500);
+      later(()=>{if(acc){G.stake*=2;G.pushLock=true}saveGame();newRound()},1600)};
+    $("paYes").onclick=()=>ans(true);$("paNo").onclick=()=>ans(false);
+  },1700);
+}
+function showTitle(){MENU=true;titleCats();titleTiles();{const sv=readSave(),b=$("tResume");b.style.display=sv?"":"none";if(sv){b.textContent='前回の続きから（第'+(sv.g.roundNo+1)+'局）'}}$("tContinue").style.display=STARTED?"":"none";$("title").style.display="flex"}
+const hideTitle=()=>{MENU=false;$("title").style.display="none"};
+$("tStart").onclick=()=>cpkOpen(()=>{STARTED=true;hideTitle();$("ov").style.display="none";clearInterval(timerId);init()}); // 対局→対戦相手を選んで決定→サイコロ
+$("ovPeek").onclick=()=>{$("ov").style.display="none";$("ovBack").style.display=""};
+$("ovBack").onclick=()=>{$("ov").style.display="flex";$("ovBack").style.display="none"};
+$("tContinue").onclick=hideTitle;
+$("tResume").onclick=()=>{const sv=readSave();if(!sv)return;SAVES.forEach(k=>{if(sv.st[k]!==undefined)SET[k]=sv.st[k]});normSet();try{localStorage.setItem("w17set",JSON.stringify(SET))}catch(e){}syncSet();STARTED=true;hideTitle();$("ov").style.display="none";clearInterval(timerId);GEN++;G=sv.g;syncOpp();$('cName').textContent=oppName();newRound()};
+$("tSet").onclick=()=>{syncSet();$("setPanel").style.display="flex"};
+$("setClose").onclick=()=>{$("setPanel").style.display="none"};
+$("tQuit").onclick=()=>{
+  clearInterval(timerId);GEN++;
+  try{window.close()}catch(e){}
+  // ブラウザのタブは自分では閉じられないことがあるので、閉じられなかったときは終了画面を出す
+  setTimeout(()=>{$("bye").style.display="flex"},150);
+};
+$("byeBack").onclick=()=>{$("bye").style.display="none";STARTED=false;showTitle()};
+$("tRule").onclick=()=>{$("rulePanel").style.display="flex"};
+$("ruleClose").onclick=()=>{$("rulePanel").style.display="none"};
+$("setBtn").onclick=showTitle;
+$("ovTitle").onclick=()=>{$("ov").style.display="none";showTitle()};
+// 新しいバージョンのお知らせ：待機中の新しい版を見つけたら、画面の下に「更新」「あとで」を出す。
+// 「更新」を押したときだけ切り替えて読み直す（作業中に勝手に読み直さない）。
+function setupUpdateNotice(){
+  if(!('serviceWorker' in navigator)||!/^https?:/.test(location.protocol))return;
+  let reloading=false,snooze=0;const hadCtl=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(hadCtl&&!reloading){reloading=true;location.reload()}});
+  const show=(w)=>{
+    if(!w||!navigator.serviceWorker.controller||document.getElementById('updNotice')||Date.now()<snooze)return;
+    const bar=document.createElement('div');bar.id='updNotice';bar.setAttribute('role','status');
+    bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:99999;max-width:calc(100% - 24px);display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;background:#1a1512;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 14px;font:14px/1.4 system-ui,"Yu Gothic UI",sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.35)';
+    const msg=document.createElement('span');msg.textContent='新しいバージョンがあります';
+    const mk=(t,main,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.style.cssText='font:inherit;border:1px solid '+(main?'#d4a017':'rgba(255,255,255,.35)')+';background:'+(main?'#d4a017':'transparent')+';color:'+(main?'#06101f':'#fff')+';border-radius:8px;padding:5px 12px;cursor:pointer';b.onclick=fn;return b};
+    bar.append(msg,
+      mk('更新',true,()=>{msg.textContent='更新しています…';w.postMessage('SKIP_WAITING')}),
+      mk('あとで',false,()=>{snooze=Date.now()+30*60*1000;bar.remove()}));
+    document.body.append(bar);
+  };
+  navigator.serviceWorker.register('sw.js').then((reg)=>{
+    if(reg.waiting)show(reg.waiting);
+    reg.addEventListener('updatefound',()=>{const w=reg.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed')show(w)})});
+    // 開きっぱなしでも気づけるよう、画面に戻ったとき・1時間ごとに新しい版を確認する
+    const chk=()=>reg.update().then(()=>{if(reg.waiting)show(reg.waiting)}).catch(()=>{});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});
+    setInterval(chk,60*60*1000);
+  }).catch(()=>{});
+}
+setupUpdateNotice();
+showTitle();
+</script>
+</body>
+</html>
