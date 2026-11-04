@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0d0b0a">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -99,7 +99,12 @@ details{font-size:12px;color:var(--dim);margin-top:8px}
 .doraBox{display:flex;align-items:center;gap:6px;justify-content:center}
 .doraBox .t{width:26px;height:37px;font-size:15px}
 #setBox{text-align:center;margin-bottom:6px}
-#title{position:fixed;inset:0;z-index:40;background:radial-gradient(ellipse at center,#2a0d0d 0%,#0d0b0a 70%);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-bottom:calc(min(6vw,64px,7.5vh)*2 + 14px)}
+/* 画面が低い時（スマホの横向きなど）に、窓が切れずにスクロールできる */
+#ov,#cpk,#pushAsk,#dice,#rulePanel,#setPanel,#bye{overflow-y:auto;overscroll-behavior:contain}
+#ov>.box,#cpk>.box,#pushAsk>.box,#dice>.box,#rulePanel>.box,#setPanel>.box{margin:auto}
+#title{overflow-y:auto;overscroll-behavior:contain;justify-content:flex-start}
+#title::before,#title::after{content:"";flex:1 1 0;min-height:0}
+#title{position:fixed;inset:0;z-index:40;background:radial-gradient(ellipse at center,#2a0d0d 0%,#0d0b0a 70%);display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding-bottom:calc(min(6vw,64px,7.5vh)*2 + 14px)}
 .tTitle{font-size:44px;letter-spacing:.3em;color:var(--gold);text-shadow:0 0 18px #7a1a14}
 .tSub{font-size:15px;color:var(--dim);margin-bottom:18px;letter-spacing:.1em}
 .tSub{text-align:center}.w1,.w2{display:block;text-align:center}.tSub .w1{display:flex;align-items:center;justify-content:center;gap:14px}.tSub .w1::before,.tSub .w1::after{content:"";width:56px;height:2px;background:linear-gradient(90deg,transparent,#c9b888)}.tSub .w1::after{background:linear-gradient(270deg,transparent,#c9b888)}.tSub .w1{font-size:24px;color:#c9b888;letter-spacing:.14em;margin-bottom:4px}h1 small .w1{font-size:15px;color:#c9b888}
@@ -109,6 +114,8 @@ details{font-size:12px;color:var(--dim);margin-top:8px}
 #tCats i{display:block;width:var(--cw);aspect-ratio:1;background:url(tiles/cats.png) no-repeat;background-size:2400% 100%;opacity:.7;filter:brightness(.85)}
 @media(max-width:600px){#tCats{--cw:8vw}#title{padding-bottom:calc(16vw + 14px);gap:8px}.tTitle{font-size:clamp(22px,7.4vw,34px);letter-spacing:.1em;white-space:nowrap}.tSub{font-size:12px;margin-bottom:8px}.tSub .w1{gap:8px;font-size:14px;white-space:nowrap}.tSub .w1::before,.tSub .w1::after{width:22px}#title .tbtn{padding-top:9px;padding-bottom:9px}}
 @media(max-height:620px){#tCats{display:none}#title{padding-bottom:0}}
+/* 横向きのスマホなど、高さが低い画面：題字・ボタンを詰める */
+@media(max-height:480px){#title{gap:6px;padding-bottom:6px}#tTiles{--w:min(8vw,46px,10vh);margin-bottom:14px}.tTitle{font-size:24px;letter-spacing:.12em}.tSub{font-size:11px;margin-bottom:2px}.tSub .w1{font-size:13px}#title .tbtn{width:290px;max-width:90vw;padding:6px 12px;font-size:15px;letter-spacing:.2em}}
 #tTiles i.g{filter:drop-shadow(0 0 3px rgba(190,225,255,.5))}#tTiles i.b{filter:drop-shadow(0 0 3px rgba(255,255,255,.2))}
 #tTiles i:nth-child(2n){animation-delay:-1s}#tTiles i:nth-child(3n){animation-delay:-2s}
 @keyframes tbob{0%,100%{translate:0 0}50%{translate:0 -4px}}
@@ -149,7 +156,7 @@ details{font-size:12px;color:var(--dim);margin-top:8px}
 #cpk .card .face img{height:96px;width:96px;object-fit:contain}
 #cSay{display:none;margin:0 auto 8px;max-width:220px;background:#f4ecd8;color:#1a1410;border:2px solid #111;border-radius:12px;padding:6px 10px;font-size:14px;font-weight:bold;line-height:1.4;position:relative}#cSay:before{content:'';position:absolute;top:-8px;left:50%;margin-left:-6px;border:6px solid transparent;border-top:0;border-bottom-color:#111}
 
-#cv{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+#cv{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;touch-action:none}
 #app{position:relative;z-index:1;max-width:none;padding:0;pointer-events:none}
 #app>*{pointer-events:auto}
 .tiles,.lbl{display:none!important}
@@ -178,6 +185,23 @@ h1 small{display:none}
 #buildBox,#playBox{padding:6px 8px}
 @media(min-width:760px){#buildBox{left:50%;right:auto;bottom:auto;top:38%;transform:translate(-50%,-50%);width:min(400px,60vw);padding:12px 16px;font-size:17px}#buildBox #buildTitle{font-size:20px}#buildBox #timer{font-size:40px}#buildBox .btns button{font-size:19px;padding:10px 20px}#buildBox #info{font-size:16px}#buildBox .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}}
 @media(max-width:899px){#cpuBox{width:min(520px,calc(100vw - 12px));min-height:112px;padding:8px 86px 8px 12px;font-size:15px}#cpuBox .name{font-size:18px}#cpuBox #cFace{width:64px;height:78px;right:8px;top:6px}#cpuBox #cSay{left:12px;right:86px;bottom:6px;font-size:12px}.mid{top:124px;left:96px;right:6px;width:auto;min-width:0;font-size:12px;padding:4px 6px}#setBox{top:124px;padding:2px 4px}#setBox button{font-size:12px;padding:6px 8px}#cpuBox.catbox{padding-right:122px;min-height:116px}#cpuBox.catbox #cSay{right:122px}#cpuBox #cFace.cat{width:112px;height:112px;right:4px;top:2px}}
+/* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
+@media(max-height:480px){
+h1{display:none}
+#setBox{top:6px;left:6px}
+#cpuBox,#cpuBox.catbox{left:84px;top:6px;transform:none;width:min(330px,calc(52vw - 90px));min-height:0;padding:6px 76px 6px 10px;font-size:13px}
+#cpuBox .name{font-size:15px}
+#cpuBox #cEpi{font-size:10px}
+#cpuBox #cFace,#cpuBox #cFace.cat{width:64px;height:64px;right:6px;top:4px}
+#cpuBox #cSay,#cpuBox.catbox #cSay{position:static;margin:2px 0 0;font-size:11px;max-width:none}
+.mid{top:6px;left:auto;right:6px;width:min(300px,calc(48vw - 20px));min-width:0;font-size:11px;padding:3px 6px}
+#zoomBtns{left:auto;right:6px;top:50%;bottom:auto}
+#zoomBtns button{width:32px;height:32px;font-size:16px}
+#buildBox,#playBox{top:112px;bottom:6px;left:6px;right:auto;transform:none;width:218px;max-height:none;overflow-y:auto;padding:6px 8px;font-size:12px}
+#buildBox #buildTitle{font-size:13px}#buildBox #timer{font-size:24px}#buildBox #info{font-size:12px}
+#buildBox .btns{margin-top:4px}#buildBox .btns button{font-size:14px;padding:6px 14px}
+#dice{padding-top:50px}#dice .box{min-width:200px!important;padding:6px 14px!important;font-size:13px}#dice h3{margin:0 0 2px;font-size:15px}#dice .dRow{margin:0;gap:14px}#dice .dv{font-size:24px}#dice .box p,#dice .box .btns{margin:4px 0}#dice .box button{padding:5px 12px;font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -1684,17 +1708,21 @@ function init3d(){
   R3.zoom=1;R3.el=1.0;R3.az=0;R3.dAz=0;R3.dEl=0;R3.rot=false;R3.pts=new Map();R3.pan=new THREE.Vector3();R3.moved=0;
   const setZ=z=>{R3.zoom=Math.min(1.5,Math.max(.35,z))};
   cv.addEventListener('wheel',e=>{e.preventDefault();setZ(R3.zoom*Math.exp(e.deltaY*.0012))},{passive:false});
-  cv.addEventListener('pointerdown',e=>{R3.pts.set(e.pointerId,[e.clientX,e.clientY]);R3.pd=null;R3.moved=0;R3.down=[e.clientX,e.clientY];R3.rot=e.button==1||e.shiftKey;if(e.button==1)e.preventDefault()});
+  cv.addEventListener('pointerdown',e=>{R3.pts.set(e.pointerId,[e.clientX,e.clientY]);R3.pd=null;R3.pc=null;R3.t0=performance.now();if(R3.pts.size>1)R3.multi=true;R3.moved=0;R3.down=[e.clientX,e.clientY];R3.rot=e.button==1||e.shiftKey;if(e.button==1)e.preventDefault()});
   cv.addEventListener('pointermove',e=>{
     if(!R3.pts.has(e.pointerId))return;
     const prev=R3.pts.get(e.pointerId);R3.pts.set(e.pointerId,[e.clientX,e.clientY]);
     if(R3.pts.size==1){
       R3.moved=Math.hypot(e.clientX-R3.down[0],e.clientY-R3.down[1]);
-      if((SET.ctl=='std')==R3.rot&&R3.moved>5){R3.dAz-=(e.clientX-prev[0])*.006;R3.dEl=Math.max(-.7,Math.min(.6,R3.dEl+(e.clientY-prev[1])*.004));R3.moved=99}else if(R3.moved>5){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight;const dx=(e.clientX-prev[0])*sc,dy=(e.clientY-prev[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
+      // 触っている間に2本目の指が着いた後や、ピンチ直後（指が残っている間）は回転させない。タッチは着いてすぐ（ピンチの準備）も動かさない
+      if(R3.multi||(e.pointerType=='touch'&&performance.now()-R3.t0<150)){}
+      else if((SET.ctl=='std')==R3.rot&&R3.moved>5){R3.dAz-=(e.clientX-prev[0])*.006;R3.dEl=Math.max(-.7,Math.min(.6,R3.dEl+(e.clientY-prev[1])*.004));R3.moved=99}else if(R3.moved>5){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight;const dx=(e.clientX-prev[0])*sc,dy=(e.clientY-prev[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
     }
-    if(R3.pts.size==2){const [a,b]=[...R3.pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);R3.moved=99;if(R3.pd)setZ(R3.zoom*R3.pd/d);R3.pd=d}
+    if(R3.pts.size==2){const [a,b]=[...R3.pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;R3.moved=99;if(R3.pd)setZ(R3.zoom*R3.pd/d);R3.pd=d;
+      if(R3.pc){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight,dx=(cx-R3.pc[0])*sc,dy=(cy-R3.pc[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
+      R3.pc=[cx,cy]}
   });
-  const up=e=>{R3.pts.delete(e.pointerId);R3.pd=null};
+  const up=e=>{R3.pts.delete(e.pointerId);R3.pd=null;R3.pc=null;if(!R3.pts.size)R3.multi=false};
   cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
   const zb=document.createElement('div');zb.id='zoomBtns';
   zb.innerHTML='<button id="zIn">＋</button><button id="zOut">－</button><button id="zL" title="左へ回す">↺</button><button id="zR" title="右へ回す">↻</button><button id="zRs">⟲</button><button id="zView" title="視点切替">👁</button>';

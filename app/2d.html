@@ -99,7 +99,12 @@ details{font-size:12px;color:var(--dim);margin-top:8px}
 .doraBox{display:flex;align-items:center;gap:6px;justify-content:center}
 .doraBox .t{width:26px;height:37px;font-size:15px}
 #setBox{text-align:center;margin-bottom:6px}
-#title{position:fixed;inset:0;z-index:40;background:radial-gradient(ellipse at center,#2a0d0d 0%,#0d0b0a 70%);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-bottom:calc(min(6vw,64px,7.5vh)*2 + 14px)}
+/* 画面が低い時（スマホの横向きなど）に、窓が切れずにスクロールできる */
+#ov,#cpk,#pushAsk,#dice,#rulePanel,#setPanel,#bye{overflow-y:auto;overscroll-behavior:contain}
+#ov>.box,#cpk>.box,#pushAsk>.box,#dice>.box,#rulePanel>.box,#setPanel>.box{margin:auto}
+#title{overflow-y:auto;overscroll-behavior:contain;justify-content:flex-start}
+#title::before,#title::after{content:"";flex:1 1 0;min-height:0}
+#title{position:fixed;inset:0;z-index:40;background:radial-gradient(ellipse at center,#2a0d0d 0%,#0d0b0a 70%);display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding-bottom:calc(min(6vw,64px,7.5vh)*2 + 14px)}
 .tTitle{font-size:44px;letter-spacing:.3em;color:var(--gold);text-shadow:0 0 18px #7a1a14}
 .tSub{font-size:15px;color:var(--dim);margin-bottom:18px;letter-spacing:.1em}
 .tSub{text-align:center}.w1,.w2{display:block;text-align:center}.tSub .w1{display:flex;align-items:center;justify-content:center;gap:14px}.tSub .w1::before,.tSub .w1::after{content:"";width:56px;height:2px;background:linear-gradient(90deg,transparent,#c9b888)}.tSub .w1::after{background:linear-gradient(270deg,transparent,#c9b888)}.tSub .w1{font-size:24px;color:#c9b888;letter-spacing:.14em;margin-bottom:4px}h1 small .w1{font-size:15px;color:#c9b888}
@@ -109,6 +114,8 @@ details{font-size:12px;color:var(--dim);margin-top:8px}
 #tCats i{display:block;width:var(--cw);aspect-ratio:1;background:url(tiles/cats.png) no-repeat;background-size:2400% 100%;opacity:.7;filter:brightness(.85)}
 @media(max-width:600px){#tCats{--cw:8vw}#title{padding-bottom:calc(16vw + 14px);gap:8px}.tTitle{font-size:clamp(22px,7.4vw,34px);letter-spacing:.1em;white-space:nowrap}.tSub{font-size:12px;margin-bottom:8px}.tSub .w1{gap:8px;font-size:14px;white-space:nowrap}.tSub .w1::before,.tSub .w1::after{width:22px}#title .tbtn{padding-top:9px;padding-bottom:9px}}
 @media(max-height:620px){#tCats{display:none}#title{padding-bottom:0}}
+/* 横向きのスマホなど、高さが低い画面：題字・ボタンを詰める */
+@media(max-height:480px){#title{gap:6px;padding-bottom:6px}#tTiles{--w:min(8vw,46px,10vh);margin-bottom:14px}.tTitle{font-size:24px;letter-spacing:.12em}.tSub{font-size:11px;margin-bottom:2px}.tSub .w1{font-size:13px}#title .tbtn{width:290px;max-width:90vw;padding:6px 12px;font-size:15px;letter-spacing:.2em}}
 #tTiles i.g{filter:drop-shadow(0 0 3px rgba(190,225,255,.5))}#tTiles i.b{filter:drop-shadow(0 0 3px rgba(255,255,255,.2))}
 #tTiles i:nth-child(2n){animation-delay:-1s}#tTiles i:nth-child(3n){animation-delay:-2s}
 @keyframes tbob{0%,100%{translate:0 0}50%{translate:0 -4px}}

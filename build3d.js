@@ -6,9 +6,10 @@ const three=fs.readFileSync('lib/three.min.js','utf8');
 const src=fs.readFileSync('src3d.js','utf8');
 const rep=(a,b)=>{if(!s.includes(a))throw new Error('not found: '+a);s=s.replace(a,()=>b)};
 
+rep('<meta name="viewport" content="width=device-width,initial-scale=1">','<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">');
 rep('<title>ぬこぬこじゅうななほ</title>','<title>ぬこぬこじゅうななほ 3D</title>');
 rep('</style>',`
-#cv{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+#cv{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;touch-action:none}
 #app{position:relative;z-index:1;max-width:none;padding:0;pointer-events:none}
 #app>*{pointer-events:auto}
 .tiles,.lbl{display:none!important}
@@ -37,6 +38,23 @@ h1 small{display:none}
 #buildBox,#playBox{padding:6px 8px}
 @media(min-width:760px){#buildBox{left:50%;right:auto;bottom:auto;top:38%;transform:translate(-50%,-50%);width:min(400px,60vw);padding:12px 16px;font-size:17px}#buildBox #buildTitle{font-size:20px}#buildBox #timer{font-size:40px}#buildBox .btns button{font-size:19px;padding:10px 20px}#buildBox #info{font-size:16px}#buildBox .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}}
 @media(max-width:899px){#cpuBox{width:min(520px,calc(100vw - 12px));min-height:112px;padding:8px 86px 8px 12px;font-size:15px}#cpuBox .name{font-size:18px}#cpuBox #cFace{width:64px;height:78px;right:8px;top:6px}#cpuBox #cSay{left:12px;right:86px;bottom:6px;font-size:12px}.mid{top:124px;left:96px;right:6px;width:auto;min-width:0;font-size:12px;padding:4px 6px}#setBox{top:124px;padding:2px 4px}#setBox button{font-size:12px;padding:6px 8px}#cpuBox.catbox{padding-right:122px;min-height:116px}#cpuBox.catbox #cSay{right:122px}#cpuBox #cFace.cat{width:112px;height:112px;right:4px;top:2px}}
+/* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
+@media(max-height:480px){
+h1{display:none}
+#setBox{top:6px;left:6px}
+#cpuBox,#cpuBox.catbox{left:84px;top:6px;transform:none;width:min(330px,calc(52vw - 90px));min-height:0;padding:6px 76px 6px 10px;font-size:13px}
+#cpuBox .name{font-size:15px}
+#cpuBox #cEpi{font-size:10px}
+#cpuBox #cFace,#cpuBox #cFace.cat{width:64px;height:64px;right:6px;top:4px}
+#cpuBox #cSay,#cpuBox.catbox #cSay{position:static;margin:2px 0 0;font-size:11px;max-width:none}
+.mid{top:6px;left:auto;right:6px;width:min(300px,calc(48vw - 20px));min-width:0;font-size:11px;padding:3px 6px}
+#zoomBtns{left:auto;right:6px;top:50%;bottom:auto}
+#zoomBtns button{width:32px;height:32px;font-size:16px}
+#buildBox,#playBox{top:112px;bottom:6px;left:6px;right:auto;transform:none;width:218px;max-height:none;overflow-y:auto;padding:6px 8px;font-size:12px}
+#buildBox #buildTitle{font-size:13px}#buildBox #timer{font-size:24px}#buildBox #info{font-size:12px}
+#buildBox .btns{margin-top:4px}#buildBox .btns button{font-size:14px;padding:6px 14px}
+#dice{padding-top:50px}#dice .box{min-width:200px!important;padding:6px 14px!important;font-size:13px}#dice h3{margin:0 0 2px;font-size:15px}#dice .dRow{margin:0;gap:14px}#dice .dv{font-size:24px}#dice .box p,#dice .box .btns{margin:4px 0}#dice .box button{padding:5px 12px;font-size:14px}
+}
 </style>`);
 rep('<div class="side">\n  <div id="cFace"></div>\n  <div id="cSay"></div>\n  <div id="cEpi"></div>\n  <div class="row"><span class="name" id="cName">','<div class="side" id="cpuBox">\n  <div id="cFace"></div>\n  <div id="cSay"></div>\n  <div id="cEpi"></div>\n  <div class="row"><span class="name" id="cName">');
 rep('<div class="lbl">配牌（クリックで選ぶ）</div>','');

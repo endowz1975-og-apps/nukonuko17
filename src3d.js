@@ -78,17 +78,21 @@ function init3d(){
   R3.zoom=1;R3.el=1.0;R3.az=0;R3.dAz=0;R3.dEl=0;R3.rot=false;R3.pts=new Map();R3.pan=new THREE.Vector3();R3.moved=0;
   const setZ=z=>{R3.zoom=Math.min(1.5,Math.max(.35,z))};
   cv.addEventListener('wheel',e=>{e.preventDefault();setZ(R3.zoom*Math.exp(e.deltaY*.0012))},{passive:false});
-  cv.addEventListener('pointerdown',e=>{R3.pts.set(e.pointerId,[e.clientX,e.clientY]);R3.pd=null;R3.moved=0;R3.down=[e.clientX,e.clientY];R3.rot=e.button==1||e.shiftKey;if(e.button==1)e.preventDefault()});
+  cv.addEventListener('pointerdown',e=>{R3.pts.set(e.pointerId,[e.clientX,e.clientY]);R3.pd=null;R3.pc=null;R3.t0=performance.now();if(R3.pts.size>1)R3.multi=true;R3.moved=0;R3.down=[e.clientX,e.clientY];R3.rot=e.button==1||e.shiftKey;if(e.button==1)e.preventDefault()});
   cv.addEventListener('pointermove',e=>{
     if(!R3.pts.has(e.pointerId))return;
     const prev=R3.pts.get(e.pointerId);R3.pts.set(e.pointerId,[e.clientX,e.clientY]);
     if(R3.pts.size==1){
       R3.moved=Math.hypot(e.clientX-R3.down[0],e.clientY-R3.down[1]);
-      if((SET.ctl=='std')==R3.rot&&R3.moved>5){R3.dAz-=(e.clientX-prev[0])*.006;R3.dEl=Math.max(-.7,Math.min(.6,R3.dEl+(e.clientY-prev[1])*.004));R3.moved=99}else if(R3.moved>5){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight;const dx=(e.clientX-prev[0])*sc,dy=(e.clientY-prev[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
+      // 触っている間に2本目の指が着いた後や、ピンチ直後（指が残っている間）は回転させない。タッチは着いてすぐ（ピンチの準備）も動かさない
+      if(R3.multi||(e.pointerType=='touch'&&performance.now()-R3.t0<150)){}
+      else if((SET.ctl=='std')==R3.rot&&R3.moved>5){R3.dAz-=(e.clientX-prev[0])*.006;R3.dEl=Math.max(-.7,Math.min(.6,R3.dEl+(e.clientY-prev[1])*.004));R3.moved=99}else if(R3.moved>5){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight;const dx=(e.clientX-prev[0])*sc,dy=(e.clientY-prev[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
     }
-    if(R3.pts.size==2){const [a,b]=[...R3.pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);R3.moved=99;if(R3.pd)setZ(R3.zoom*R3.pd/d);R3.pd=d}
+    if(R3.pts.size==2){const [a,b]=[...R3.pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;R3.moved=99;if(R3.pd)setZ(R3.zoom*R3.pd/d);R3.pd=d;
+      if(R3.pc){const sc=R3.dist*R3.zoom*Math.tan(R3.cam.fov*Math.PI/360)*2/innerHeight,dx=(cx-R3.pc[0])*sc,dy=(cy-R3.pc[1])*sc*1.5,ca=Math.cos(R3.az),sa=Math.sin(R3.az);R3.pan.x-=dx*ca+dy*sa;R3.pan.z-=-dx*sa+dy*ca;R3.pan.x=Math.max(-20,Math.min(20,R3.pan.x));R3.pan.z=Math.max(-14,Math.min(14,R3.pan.z))}
+      R3.pc=[cx,cy]}
   });
-  const up=e=>{R3.pts.delete(e.pointerId);R3.pd=null};
+  const up=e=>{R3.pts.delete(e.pointerId);R3.pd=null;R3.pc=null;if(!R3.pts.size)R3.multi=false};
   cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
   const zb=document.createElement('div');zb.id='zoomBtns';
   zb.innerHTML='<button id="zIn">＋</button><button id="zOut">－</button><button id="zL" title="左へ回す">↺</button><button id="zR" title="右へ回す">↻</button><button id="zRs">⟲</button><button id="zView" title="視点切替">👁</button>';
