@@ -125,7 +125,13 @@ function hudBand(){
   for(const id of ['playBox','buildBox']){const e=document.getElementById(id);if(vis(e))bot=Math.min(bot,e.getBoundingClientRect().top)}
   return {top:Math.round(top),bot:Math.round(bot)};
 }
-function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix();document.documentElement.style.setProperty('--midY',(h/2-R3.y)+'px')}
+function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix();placeMid()}
+// 賭けカリカリの枠の縦位置：卓の中央。PCの作牌中は、中央にある作牌パネルの下へ下げる
+function placeMid(){
+  const m=document.querySelector('.mid'),bb=document.getElementById('buildBox'),h=innerHeight;let y=h/2-R3.y;
+  if(m&&bb&&innerWidth>=760&&h>480&&getComputedStyle(bb).display!=='none'){const r=bb.getBoundingClientRect();y=Math.max(y,r.bottom+m.getBoundingClientRect().height/2+8)}
+  document.documentElement.style.setProperty('--midY',y+'px');
+}
 function fit3d(){
   const {ren,cam,target}=R3,w=innerWidth,h=innerHeight,a=w/h;
   ren.setSize(w,h,false);cam.aspect=a;
@@ -480,7 +486,7 @@ function loop3d(){
     m.rotation.x+=(tg.rx-m.rotation.x)*k;m.rotation.y+=(tg.ry-m.rotation.y)*k;
   }
   // 画面上の情報の高さが変わったら、卓の位置・大きさを合わせ直す（なめらかに動かす）
-  if((R3.fc=(R3.fc||0)+1)%12==0){const b=hudBand(),k=b?b.top+','+b.bot+','+innerWidth+','+innerHeight:innerWidth+','+innerHeight;if(k!==R3.bk)fit3d()}
+  if((R3.fc=(R3.fc||0)+1)%12==0){placeMid();const b=hudBand(),k=b?b.top+','+b.bot+','+innerWidth+','+innerHeight:innerWidth+','+innerHeight;if(k!==R3.bk)fit3d()}
   if(Math.abs(R3.s-R3.tS)>.002||Math.abs(R3.y-R3.tY)>.3){R3.s+=(R3.tS-R3.s)*.15;R3.y+=(R3.tY-R3.y)*.15;R3.dist=R3.base/R3.s;applyView()}
   const V=VIEWS[SET.view]||VIEWS.angle;
   if(R3.lastView!==SET.view){R3.lastView=SET.view;R3.dAz=0;R3.dEl=0}

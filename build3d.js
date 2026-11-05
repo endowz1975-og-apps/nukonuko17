@@ -46,12 +46,19 @@ h1 small{display:none}
 #playBox .btns{order:3;flex:none;display:flex;gap:6px;margin:0!important}
 #playBox .btns button{padding:6px 12px;font-size:14px}
 }
-/* スマホ：賭けカリカリ・ドラ・メッセージの枠は、卓の中央（互いの河の間）に小さく置く。縦位置は src3d.js が --midY に入れる */
-@media(max-width:759px) and (orientation:portrait),(max-height:480px){
+/* 賭けカリカリ・ドラ・メッセージの枠は、卓の中央（互いの河の間）に小さく置く。縦位置は src3d.js が --midY に入れる */
+@media all{
 .mid{left:50%!important;right:auto!important;top:var(--midY,50%)!important;transform:translate(-50%,-50%);width:min(300px,72vw)!important;min-width:0;padding:3px 8px;font-size:11px;background:rgba(22,17,14,.8);border-radius:8px;z-index:2}
 .mid .stake{font-size:13px;line-height:1.3}
 .mid .doraBox{font-size:10px;margin:1px 0;gap:4px;flex-wrap:wrap}.mid .doraBox .t{width:22px;height:31px;font-size:13px}.mid .doraBox .meta{white-space:nowrap}.mid .meta{color:#c9bca3}
 .mid #msg{font-size:11px;line-height:1.2;min-height:0;margin:0}.mid #msg .rt{--rw:24px;margin:0 2px}.mid .doraBox .t{width:20px;height:28px;font-size:12px}.mid .doraBox{margin:0}.mid .stake{margin:0}
+}
+/* PC（広くて高い画面）は、枠を少し大きく */
+@media(min-width:760px) and (min-height:481px){
+.mid{width:min(380px,42vw)!important;padding:6px 12px;font-size:13px}
+.mid .stake{font-size:18px}
+.mid .doraBox{font-size:12px;gap:8px}.mid .doraBox .t{width:26px;height:37px;font-size:15px}
+.mid #msg{font-size:14px}.mid #msg .rt{--rw:32px;margin:0 3px}
 }
 /* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
 @media(max-height:480px){

@@ -1,5 +1,5 @@
 // ぬこぬこじゅうななほ：オフラインで使えるようにする。VERSION は tools/pack.js が中身から自動で決める
-const VERSION = 'nukonuko17-f8512913';
+const VERSION = 'nukonuko17-a605ce03';
 const FILES = [ "./", "index.html", "2d.html", "manifest.json", "icon-192.png", "icon-512.png", "LICENSE.txt", "cat/c01.png", "cat/c02.png", "cat/c03.png", "cat/c04.png", "cat/c05.png", "cat/c06.png", "cat/c07.png", "cat/c08.png", "cat/c09.png", "cat/c10.png", "cat/c11.png", "cat/c12.png", "cat/c13.png", "cat/c14.png", "cat/c15.png", "cat/c16.png", "cat/c17.png", "cat/c18.png", "cat/c19.png", "cat/c20.png", "cat/c21.png", "cat/c22.png", "cat/c23.png", "cat/c24.png", "tiles/cats.png", "tiles/kokushi.png", "tiles/tiles34.png", "fonts/shout.woff2" ];
 
 self.addEventListener('install', (e) => {
