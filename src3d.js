@@ -115,12 +115,27 @@ function slab(depth){
   const g=new THREE.ExtrudeGeometry(s,{depth:depth-2*BV,bevelEnabled:true,bevelThickness:BV,bevelSize:BV,bevelSegments:6,curveSegments:10});
   g.translate(0,0,-(depth-2*BV)/2);return g;
 }
+// 縦長のスマホ：上の情報（相手カード・局の情報）と下の自分用パネルの間に、卓が収まるように位置と大きさを決める
+function hudBand(){
+  const w=innerWidth,h=innerHeight;
+  if(w>=760||h<w)return null;
+  const vis=e=>e&&getComputedStyle(e).display!=='none';
+  let top=0,bot=h;
+  for(const e of [document.getElementById('cpuBox'),document.querySelector('.mid')])if(vis(e))top=Math.max(top,e.getBoundingClientRect().bottom);
+  for(const id of ['playBox','buildBox']){const e=document.getElementById(id);if(vis(e))bot=Math.min(bot,e.getBoundingClientRect().top)}
+  return {top:Math.round(top),bot:Math.round(bot)};
+}
+function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix()}
 function fit3d(){
   const {ren,cam,target}=R3,w=innerWidth,h=innerHeight,a=w/h;
   ren.setSize(w,h,false);cam.aspect=a;
-  const el=1.0,dist=Math.max(34,17/(Math.tan(cam.fov*Math.PI/360)*a));
-  R3.dist=dist;
-  cam.setViewOffset(w,h,0,Math.min(20,h*.03),w,h);cam.updateProjectionMatrix();
+  R3.base=Math.max(34,17/(Math.tan(cam.fov*Math.PI/360)*a));
+  const b=hudBand();
+  R3.bk=b?b.top+','+b.bot+','+w+','+h:w+','+h;
+  R3.tS=1;R3.tY=Math.min(20,h*.03);
+  if(b){R3.tS=Math.max(.55,Math.min(1,(b.bot-b.top-6)/(.78*w)));R3.tY=h/2-(b.top+b.bot)/2}
+  if(R3.s==null){R3.s=R3.tS;R3.y=R3.tY}
+  R3.dist=R3.base/R3.s;applyView();
 }
 /* ---- 牌の絵柄 ---- */
 const INK={
@@ -464,6 +479,9 @@ function loop3d(){
     m.position.y+=(tg.y+hv+Math.min(2.2,d*.28)-m.position.y)*k;
     m.rotation.x+=(tg.rx-m.rotation.x)*k;m.rotation.y+=(tg.ry-m.rotation.y)*k;
   }
+  // 画面上の情報の高さが変わったら、卓の位置・大きさを合わせ直す（なめらかに動かす）
+  if((R3.fc=(R3.fc||0)+1)%12==0){const b=hudBand(),k=b?b.top+','+b.bot+','+innerWidth+','+innerHeight:innerWidth+','+innerHeight;if(k!==R3.bk)fit3d()}
+  if(Math.abs(R3.s-R3.tS)>.002||Math.abs(R3.y-R3.tY)>.3){R3.s+=(R3.tS-R3.s)*.15;R3.y+=(R3.tY-R3.y)*.15;R3.dist=R3.base/R3.s;applyView()}
   const V=VIEWS[SET.view]||VIEWS.angle;
   if(R3.lastView!==SET.view){R3.lastView=SET.view;R3.dAz=0;R3.dEl=0}
   R3.el+=(Math.max(.2,Math.min(1.5,V.el+R3.dEl))-R3.el)*.2;R3.az+=(V.az+R3.dAz-R3.az)*.2;

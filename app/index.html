@@ -77,6 +77,7 @@ button.win{background:#7a1a14;border-color:#c0392b}
 #ov .tiles.rts{gap:0;align-items:flex-end}
 #ov .dgrp{display:flex;align-items:center;gap:4px}
 .rt{margin:0 calc(var(--rw)*-.09)}
+#msg .rt{--rw:34px;margin:0 3px;vertical-align:middle}
 .rt{--rw:min(44px,5.8vw);display:inline-block;width:var(--rw);aspect-ratio:80/108;background:url(tiles/tiles34.png) no-repeat;background-size:3400% 400%;flex:none}
 .rt.winT{margin-left:10px;filter:drop-shadow(0 0 5px rgba(255,214,120,.9))}
 .shout{position:fixed;left:50%;transform:translateX(-50%) rotate(-2deg);width:min(460px,92vw);height:min(120px,26vw);z-index:70;pointer-events:none;display:flex;align-items:center;justify-content:center;animation:shoutpop .45s cubic-bezier(.2,1.4,.4,1)}
@@ -185,6 +186,14 @@ h1 small{display:none}
 #buildBox,#playBox{padding:6px 8px}
 @media(min-width:760px){#buildBox{left:50%;right:auto;bottom:auto;top:38%;transform:translate(-50%,-50%);width:min(400px,60vw);padding:12px 16px;font-size:17px}#buildBox #buildTitle{font-size:20px}#buildBox #timer{font-size:40px}#buildBox .btns button{font-size:19px;padding:10px 20px}#buildBox #info{font-size:16px}#buildBox .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}}
 @media(max-width:899px){#cpuBox{width:min(520px,calc(100vw - 12px));min-height:112px;padding:8px 86px 8px 12px;font-size:15px}#cpuBox .name{font-size:18px}#cpuBox #cFace{width:64px;height:78px;right:8px;top:6px}#cpuBox #cSay{left:12px;right:86px;bottom:6px;font-size:12px}.mid{top:124px;left:96px;right:6px;width:auto;min-width:0;font-size:12px;padding:4px 6px}#setBox{top:124px;padding:2px 4px}#setBox button{font-size:12px;padding:6px 8px}#cpuBox.catbox{padding-right:122px;min-height:116px}#cpuBox.catbox #cSay{right:122px}#cpuBox #cFace.cat{width:112px;height:112px;right:4px;top:2px}}
+/* スマホ縦：自分用パネルを詰める。ゲージは1行、待ち情報とボタンは同じ行に並べる */
+@media(max-width:759px) and (orientation:portrait){
+#playBox{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:6px 10px}
+#playBox .row{order:1;flex:1 1 100%;margin:0!important}
+#playBox #pWaitInfo{order:2;flex:1 1 0;min-width:0;font-size:11px;margin:0}
+#playBox .btns{order:3;flex:none;display:flex;gap:6px;margin:0!important}
+#playBox .btns button{padding:6px 12px;font-size:14px}
+}
 /* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
 @media(max-height:480px){
 h1{display:none}
@@ -554,6 +563,8 @@ function cpuBuild(tiles,opt,cap=120000){
 /* ---------- ゲーム ---------- */
 let G,timerId=null;
 const say=s=>$('msg').textContent=s;
+// 牌の絵つきのメッセージ（相手の捨て牌など）
+function sayTile(pre,t,post){const m=$('msg');m.replaceChildren(document.createTextNode(pre),rtEl(t),document.createTextNode(post))}
 let GEN=0;
 // 効果音: ブラウザの Web Audio でその場で合成する（音のファイルは使わない）
 const sfx=(()=>{
@@ -1090,8 +1101,9 @@ function cpuTurn(){
   sfx.tileLow();
   G.phase='ron';render();
   if(C.disc.length==1&&RII)callout('リーチ','c');
-  say((C.disc.length==1&&RII?''+oppName()+'のリーチ！　':'')+''+oppName()+'が '+tn(t.k)+' を切った。ロンか、見送るか（右クリックで見送り）。');
+  sayTile(oppName()+'が ',t,' を切った'); // リーチは呼び出しの表示（callout）で出る
 }
+if(!matchMedia('(hover:hover)').matches)$('bPass').textContent='見送る';
 $('bPass').onclick=()=>{
   if(G.phase!='ron')return;
   const P=G.p;
@@ -1745,12 +1757,27 @@ function slab(depth){
   const g=new THREE.ExtrudeGeometry(s,{depth:depth-2*BV,bevelEnabled:true,bevelThickness:BV,bevelSize:BV,bevelSegments:6,curveSegments:10});
   g.translate(0,0,-(depth-2*BV)/2);return g;
 }
+// 縦長のスマホ：上の情報（相手カード・局の情報）と下の自分用パネルの間に、卓が収まるように位置と大きさを決める
+function hudBand(){
+  const w=innerWidth,h=innerHeight;
+  if(w>=760||h<w)return null;
+  const vis=e=>e&&getComputedStyle(e).display!=='none';
+  let top=0,bot=h;
+  for(const e of [document.getElementById('cpuBox'),document.querySelector('.mid')])if(vis(e))top=Math.max(top,e.getBoundingClientRect().bottom);
+  for(const id of ['playBox','buildBox']){const e=document.getElementById(id);if(vis(e))bot=Math.min(bot,e.getBoundingClientRect().top)}
+  return {top:Math.round(top),bot:Math.round(bot)};
+}
+function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix()}
 function fit3d(){
   const {ren,cam,target}=R3,w=innerWidth,h=innerHeight,a=w/h;
   ren.setSize(w,h,false);cam.aspect=a;
-  const el=1.0,dist=Math.max(34,17/(Math.tan(cam.fov*Math.PI/360)*a));
-  R3.dist=dist;
-  cam.setViewOffset(w,h,0,Math.min(20,h*.03),w,h);cam.updateProjectionMatrix();
+  R3.base=Math.max(34,17/(Math.tan(cam.fov*Math.PI/360)*a));
+  const b=hudBand();
+  R3.bk=b?b.top+','+b.bot+','+w+','+h:w+','+h;
+  R3.tS=1;R3.tY=Math.min(20,h*.03);
+  if(b){R3.tS=Math.max(.55,Math.min(1,(b.bot-b.top-6)/(.78*w)));R3.tY=h/2-(b.top+b.bot)/2}
+  if(R3.s==null){R3.s=R3.tS;R3.y=R3.tY}
+  R3.dist=R3.base/R3.s;applyView();
 }
 /* ---- 牌の絵柄 ---- */
 const INK={
@@ -2094,6 +2121,9 @@ function loop3d(){
     m.position.y+=(tg.y+hv+Math.min(2.2,d*.28)-m.position.y)*k;
     m.rotation.x+=(tg.rx-m.rotation.x)*k;m.rotation.y+=(tg.ry-m.rotation.y)*k;
   }
+  // 画面上の情報の高さが変わったら、卓の位置・大きさを合わせ直す（なめらかに動かす）
+  if((R3.fc=(R3.fc||0)+1)%12==0){const b=hudBand(),k=b?b.top+','+b.bot+','+innerWidth+','+innerHeight:innerWidth+','+innerHeight;if(k!==R3.bk)fit3d()}
+  if(Math.abs(R3.s-R3.tS)>.002||Math.abs(R3.y-R3.tY)>.3){R3.s+=(R3.tS-R3.s)*.15;R3.y+=(R3.tY-R3.y)*.15;R3.dist=R3.base/R3.s;applyView()}
   const V=VIEWS[SET.view]||VIEWS.angle;
   if(R3.lastView!==SET.view){R3.lastView=SET.view;R3.dAz=0;R3.dEl=0}
   R3.el+=(Math.max(.2,Math.min(1.5,V.el+R3.dEl))-R3.el)*.2;R3.az+=(V.az+R3.dAz-R3.az)*.2;

@@ -38,6 +38,14 @@ h1 small{display:none}
 #buildBox,#playBox{padding:6px 8px}
 @media(min-width:760px){#buildBox{left:50%;right:auto;bottom:auto;top:38%;transform:translate(-50%,-50%);width:min(400px,60vw);padding:12px 16px;font-size:17px}#buildBox #buildTitle{font-size:20px}#buildBox #timer{font-size:40px}#buildBox .btns button{font-size:19px;padding:10px 20px}#buildBox #info{font-size:16px}#buildBox .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}}
 @media(max-width:899px){#cpuBox{width:min(520px,calc(100vw - 12px));min-height:112px;padding:8px 86px 8px 12px;font-size:15px}#cpuBox .name{font-size:18px}#cpuBox #cFace{width:64px;height:78px;right:8px;top:6px}#cpuBox #cSay{left:12px;right:86px;bottom:6px;font-size:12px}.mid{top:124px;left:96px;right:6px;width:auto;min-width:0;font-size:12px;padding:4px 6px}#setBox{top:124px;padding:2px 4px}#setBox button{font-size:12px;padding:6px 8px}#cpuBox.catbox{padding-right:122px;min-height:116px}#cpuBox.catbox #cSay{right:122px}#cpuBox #cFace.cat{width:112px;height:112px;right:4px;top:2px}}
+/* スマホ縦：自分用パネルを詰める。ゲージは1行、待ち情報とボタンは同じ行に並べる */
+@media(max-width:759px) and (orientation:portrait){
+#playBox{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:6px 10px}
+#playBox .row{order:1;flex:1 1 100%;margin:0!important}
+#playBox #pWaitInfo{order:2;flex:1 1 0;min-width:0;font-size:11px;margin:0}
+#playBox .btns{order:3;flex:none;display:flex;gap:6px;margin:0!important}
+#playBox .btns button{padding:6px 12px;font-size:14px}
+}
 /* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
 @media(max-height:480px){
 h1{display:none}
