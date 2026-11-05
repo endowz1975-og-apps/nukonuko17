@@ -121,11 +121,11 @@ function hudBand(){
   if(w>=760||h<w)return null;
   const vis=e=>e&&getComputedStyle(e).display!=='none';
   let top=0,bot=h;
-  for(const e of [document.getElementById('cpuBox'),document.querySelector('.mid')])if(vis(e))top=Math.max(top,e.getBoundingClientRect().bottom);
+  for(const e of [document.getElementById('cpuBox')])if(vis(e))top=Math.max(top,e.getBoundingClientRect().bottom);
   for(const id of ['playBox','buildBox']){const e=document.getElementById(id);if(vis(e))bot=Math.min(bot,e.getBoundingClientRect().top)}
   return {top:Math.round(top),bot:Math.round(bot)};
 }
-function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix()}
+function applyView(){const {cam}=R3,w=innerWidth,h=innerHeight;cam.setViewOffset(w,h,0,R3.y,w,h);cam.updateProjectionMatrix();document.documentElement.style.setProperty('--midY',(h/2-R3.y)+'px')}
 function fit3d(){
   const {ren,cam,target}=R3,w=innerWidth,h=innerHeight,a=w/h;
   ren.setSize(w,h,false);cam.aspect=a;

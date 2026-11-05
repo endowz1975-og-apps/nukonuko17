@@ -46,6 +46,13 @@ h1 small{display:none}
 #playBox .btns{order:3;flex:none;display:flex;gap:6px;margin:0!important}
 #playBox .btns button{padding:6px 12px;font-size:14px}
 }
+/* スマホ：賭けカリカリ・ドラ・メッセージの枠は、卓の中央（互いの河の間）に小さく置く。縦位置は src3d.js が --midY に入れる */
+@media(max-width:759px) and (orientation:portrait),(max-height:480px){
+.mid{left:50%!important;right:auto!important;top:var(--midY,50%)!important;transform:translate(-50%,-50%);width:min(300px,72vw)!important;min-width:0;padding:3px 8px;font-size:11px;background:rgba(22,17,14,.8);border-radius:8px;z-index:2}
+.mid .stake{font-size:13px;line-height:1.3}
+.mid .doraBox{font-size:10px;margin:1px 0;gap:4px;flex-wrap:wrap}.mid .doraBox .t{width:22px;height:31px;font-size:13px}.mid .doraBox .meta{white-space:nowrap}.mid .meta{color:#c9bca3}
+.mid #msg{font-size:11px;line-height:1.2;min-height:0;margin:0}.mid #msg .rt{--rw:24px;margin:0 2px}.mid .doraBox .t{width:20px;height:28px;font-size:12px}.mid .doraBox{margin:0}.mid .stake{margin:0}
+}
 /* 画面の高さが低い時（スマホの横向きなど）：相手カードは左上、局の情報は右上、拡大縮小は右端に寄せ、下の操作パネルを小さくする */
 @media(max-height:480px){
 h1{display:none}
@@ -58,7 +65,13 @@ h1{display:none}
 .mid{top:6px;left:auto;right:6px;width:min(300px,calc(48vw - 20px));min-width:0;font-size:11px;padding:3px 6px}
 #zoomBtns{left:auto;right:6px;top:50%;bottom:auto}
 #zoomBtns button{width:32px;height:32px;font-size:16px}
-#buildBox,#playBox{top:112px;bottom:6px;left:6px;right:auto;transform:none;width:218px;max-height:none;overflow-y:auto;padding:6px 8px;font-size:12px}
+#buildBox{top:112px;bottom:6px;left:6px;right:auto;transform:none;width:218px;max-height:none;overflow-y:auto;padding:6px 8px;font-size:12px}
+/* 対局中の自分用パネルは下に1行（ゲージ・待ち・ボタン） */
+#playBox{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;top:auto;bottom:6px;left:50%;right:auto;transform:translateX(-50%);width:min(660px,calc(100vw - 150px));padding:4px 10px;font-size:12px}
+#playBox .row{order:1;flex:1 1 auto;min-width:0;margin:0!important}
+#playBox #pWaitInfo{order:2;flex:none;font-size:11px;margin:0;white-space:nowrap}
+#playBox .btns{order:3;flex:none;display:flex;gap:6px;margin:0!important}
+#playBox .btns button{padding:4px 10px;font-size:13px}
 #buildBox #buildTitle{font-size:13px}#buildBox #timer{font-size:24px}#buildBox #info{font-size:12px}
 #buildBox .btns{margin-top:4px}#buildBox .btns button{font-size:14px;padding:6px 14px}
 #dice{padding-top:50px}#dice .box{min-width:200px!important;padding:6px 14px!important;font-size:13px}#dice h3{margin:0 0 2px;font-size:15px}#dice .dRow{margin:0;gap:14px}#dice .dv{font-size:24px}#dice .box p,#dice .box .btns{margin:4px 0}#dice .box button{padding:5px 12px;font-size:14px}

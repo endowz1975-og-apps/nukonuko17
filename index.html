@@ -679,7 +679,7 @@ function startDora(){
   if(SET.doraBy=='pick'){
     G.phase='dora';
     if(G.rf=='p'){say('ドラ表示牌を選べ。左右の山から好きな1枚（中身は見えない）。');render()}
-    else{say(''+oppName()+'がドラ表示牌を選んでいる……');render();later(()=>chooseDora(cpuPickDora(all)),1300)}
+    else{say('');render();later(()=>chooseDora(cpuPickDora(all)),1300)}
   }else chooseDora(randomPick(all));
 }
 function cpuPickDora(all){
@@ -827,7 +827,7 @@ function render(){
   $('stake').textContent='賭けカリカリ '+fmt(G.stake)+(G.pushLock?'（倍プッシュ）':'')+'　第'+G.roundNo+(SET.match=='rounds'?'/'+SET.rounds:'')+'局';
   $('dora').innerHTML='';if(G.dora.ind)$('dora').appendChild(tileEl(G.dora.ind));
   {const wp=$('wallPanel');
-   if(G.phase=='dora'&&G.dora.walls){
+   if(G.phase=='dora'&&G.dora.walls&&G.rf=='p'){
      wp.style.display='';
      const fill=(el,arr)=>{el.innerHTML='';arr.forEach(t=>{const e=backEl();if(G.rf=='p')e.onclick=()=>chooseDora(t);el.appendChild(e)})};
      fill($('wallL'),G.dora.walls.l);fill($('wallR'),G.dora.walls.r);
